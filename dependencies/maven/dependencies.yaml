@@ -17,20 +17,32 @@ options:
 
 
 dependencies:
-  org.apache.commons:
-    commons-csv:
-      version: "1.7"
-      lang: java
-    commons-lang3:
-      version: "3.9"
+  com.google.guava:
+    guava:
+      version: "23.0"
       lang: java
 
-  commons-cli:
-    commons-cli:
-      version: "1.4"
+  com.google.protobuf:
+    protobuf-java:
+      version: "3.5.1"
       lang: java
 
-  org.yaml:
-    snakeyaml:
-      version: "1.25"
+  io.grpc:
+    grpc-core:
+      version: "1.24.1"
+      lang: java
+    grpc-netty:
+      version: "1.24.1"
+      lang: java
+    grpc-protobuf:
+      version: "1.24.1"
+      lang: java
+    grpc-stub:
+      version: "1.24.1"
+      lang: java
+    grpc-testing:
+      version: "1.24.1"
+      lang: java
+    grpc-api:
+      version: "1.24.1"
       lang: java

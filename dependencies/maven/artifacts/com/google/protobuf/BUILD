@@ -1,7 +1,7 @@
 java_library(
-    name = "snakeyaml",
+    name = "protobuf-java",
     exports = [
-        "//external:jar/org/yaml/snakeyaml"
+        "//external:jar/com/google/protobuf/protobuf-java"
     ],
     visibility = [
         "//visibility:public"
