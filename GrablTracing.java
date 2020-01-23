@@ -60,4 +60,24 @@ public class GrablTracing {
     public interface EndedTrace {
         void data(String data);
     }
+
+    public static void main(String[] args) {
+
+        GrablTracing tracing = new GrablTracing("hostname:PORT", "API_KEY");
+        GrablTracing.Analysis analysis = tracing.analysis("me", "repo", "COMMIT_SHA");
+
+        Trace trace = analysis.trace("tx.session.open", "eu:people", 1);
+        // DO STUFF
+        Trace innerTrace = trace.trace("write_something");
+        // DO INNER STUFF
+        innerTrace.end();
+        trace.end().data("{\"my_json\":\"is_cool\"}");
+
+        Trace traceWithLabels = analysis.trace("tx.session.open", "eu:people", 1, "MY", "LABELS");
+        // DO STUFF
+        Trace innerTraceWithLabels = trace.trace("write_something", "CAN", "DO");
+        // DO INNER STUFF
+        innerTraceWithLabels.end("COOL", "STUFF");
+        traceWithLabels.end("LIKE", "THIS").data("{\"my_json\":\"is_cool\"}");
+    }
 }
