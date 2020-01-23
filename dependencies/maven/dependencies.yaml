@@ -1,0 +1,36 @@
+options:
+  languages: ["java"]
+  resolverType: coursier
+  resolvers:
+  - id: mavencentral
+    type: default
+    url: https://repo.maven.apache.org/maven2/
+  - id: mavengraknai
+    url: http://maven.grakn.ai/nexus/content/repositories/snapshots/
+  - id: repograknai
+    type: default
+    url: https://repo.grakn.ai/repository/maven-snapshot/
+  strictVisibility: true
+  transitivity: runtime_deps
+  versionConflictPolicy: highest
+  thirdPartyDirectory: dependencies/maven/artifacts
+
+
+dependencies:
+  org.apache.commons:
+    commons-csv:
+      version: "1.7"
+      lang: java
+    commons-lang3:
+      version: "3.9"
+      lang: java
+
+  commons-cli:
+    commons-cli:
+      version: "1.4"
+      lang: java
+
+  org.yaml:
+    snakeyaml:
+      version: "1.25"
+      lang: java
