@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+option java_package = "grakn.grabl_tracing.protocol";
+option java_outer_classname = "TracingProto";
+
+package protocol;
+
+service TracingService {
+    rpc create (Analysis.Req) returns (Analysis.Res);
+    rpc stream (stream Trace.Req) returns (Trace.Res);
+}
+
+message Analysis {
+    message Req {
+        string owner = 1;
+        string repo = 2;
+        string commit = 3;
+    }
+    message Res {
+        string analysisId = 1;
+    }
+}
+
+message Trace {
+    message Req {
+        UUID id = 1;
+        oneof owner {
+            string analysisId = 2;
+            UUID parentTraceId = 3;
+        }
+
+        string name = 4;
+
+        string tracker = 5;
+        uint32 iteration = 6;
+
+        uint64 startTimeMillis = 7;
+        uint64 endTimeMillis = 8;
+
+        string data = 9;
+        repeated string labels = 10;
+    }
+    message Res {
+    }
+}
+
+message UUID {
+    fixed64 msb = 1;
+    fixed64 lsb = 2;
+}

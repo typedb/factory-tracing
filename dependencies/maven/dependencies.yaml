@@ -1,0 +1,48 @@
+options:
+  languages: ["java"]
+  resolverType: coursier
+  resolvers:
+  - id: mavencentral
+    type: default
+    url: https://repo.maven.apache.org/maven2/
+  - id: mavengraknai
+    url: http://maven.grakn.ai/nexus/content/repositories/snapshots/
+  - id: repograknai
+    type: default
+    url: https://repo.grakn.ai/repository/maven-snapshot/
+  strictVisibility: true
+  transitivity: runtime_deps
+  versionConflictPolicy: highest
+  thirdPartyDirectory: dependencies/maven/artifacts
+
+
+dependencies:
+  com.google.guava:
+    guava:
+      version: "23.0"
+      lang: java
+
+  com.google.protobuf:
+    protobuf-java:
+      version: "3.5.1"
+      lang: java
+
+  io.grpc:
+    grpc-core:
+      version: "1.24.1"
+      lang: java
+    grpc-netty:
+      version: "1.24.1"
+      lang: java
+    grpc-protobuf:
+      version: "1.24.1"
+      lang: java
+    grpc-stub:
+      version: "1.24.1"
+      lang: java
+    grpc-testing:
+      version: "1.24.1"
+      lang: java
+    grpc-api:
+      version: "1.24.1"
+      lang: java
