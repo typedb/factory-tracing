@@ -45,7 +45,7 @@ public class GrablTracing implements AutoCloseable {
                     .setCommit(commit)
                     .build();
             TracingProto.Analysis.Res res = tracingServiceBlockingStub.create(req);
-            String analysisId = res.getAnalysisId();
+            UUID analysisId = fromBuf(res.getAnalysisId());
             session = new TracingSession(tracingServiceStub, analysisId);
         }
 
@@ -59,21 +59,24 @@ public class GrablTracing implements AutoCloseable {
         }
 
         private class TraceImpl implements Trace {
+            private final UUID rootId;
             private final UUID id;
 
             private TraceImpl(String name, String tracker, int iteration) {
                 id = UUID.randomUUID();
+                rootId = id;
                 session.traceRootStart(id, name, tracker, iteration, System.currentTimeMillis());
             }
 
-            private TraceImpl(UUID parentId, String name) {
+            private TraceImpl(UUID rootId, UUID parentId, String name) {
+                this.rootId = rootId;
                 id = UUID.randomUUID();
-                session.traceChildStart(id, parentId, name, System.currentTimeMillis());
+                session.traceChildStart(rootId, id, parentId, name, System.currentTimeMillis());
             }
 
             @Override
             public Trace trace(String name) {
-                return new TraceImpl(id, name);
+                return new TraceImpl(rootId, id, name);
             }
 
             @Override
@@ -102,5 +105,9 @@ public class GrablTracing implements AutoCloseable {
         Trace data(String data);
         Trace labels(String... labels);
         Trace end();
+    }
+
+    private static UUID fromBuf(TracingProto.UUID uuid) {
+        return new UUID(uuid.getMsb(), uuid.getLsb());
     }
 }

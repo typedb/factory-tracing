@@ -17,15 +17,16 @@ message Analysis {
         string commit = 3;
     }
     message Res {
-        string analysisId = 1;
+        UUID analysisId = 1;
     }
 }
 
 message Trace {
     message Req {
+        UUID rootId = 11;
         UUID id = 1;
         oneof owner {
-            string analysisId = 2;
+            UUID analysisId = 2;
             UUID parentTraceId = 3;
         }
 
@@ -34,8 +35,8 @@ message Trace {
         string tracker = 5;
         uint32 iteration = 6;
 
-        uint64 startTimeMillis = 7;
-        uint64 endTimeMillis = 8;
+        uint64 started = 7;
+        uint64 ended = 8;
 
         string data = 9;
         repeated string labels = 10;

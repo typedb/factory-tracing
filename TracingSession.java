@@ -24,13 +24,13 @@ import io.grpc.stub.StreamObserver;
  * themselves and call {@link #throwErrors(String message)} directly.
  */
 class TracingSession {
-    private final String analysisId;
+    private final UUID analysisId;
     private final StreamObserver<Trace.Req> requestObserver;
     private final CountDownLatch finishLatch = new CountDownLatch(1);
 
     private final Queue<Throwable> errors = new ConcurrentLinkedQueue<>();
 
-    TracingSession(TracingServiceStub serviceStub, String analysisId) {
+    TracingSession(TracingServiceStub serviceStub, UUID analysisId) {
         this.analysisId = analysisId;
         requestObserver = serviceStub.stream(new TracingResponseObserver());
     }
@@ -39,22 +39,23 @@ class TracingSession {
         ensureConnection();
         Trace.Req req = Trace.Req.newBuilder()
                 .setId(toBuf(traceId))
-                .setAnalysisId(analysisId)
+                .setAnalysisId(toBuf(analysisId))
                 .setName(name)
                 .setTracker(tracker)
                 .setIteration(iteration)
-                .setStartTimeMillis(startMillis)
+                .setStarted(startMillis)
                 .build();
         requestObserver.onNext(req);
     }
 
-    void traceChildStart(UUID traceId, UUID parentId, String name, long startMillis) {
+    void traceChildStart(UUID rootId, UUID traceId, UUID parentId, String name, long startMillis) {
         ensureConnection();
         Trace.Req req = Trace.Req.newBuilder()
+                .setRootId(toBuf(rootId))
                 .setId(toBuf(traceId))
                 .setParentTraceId(toBuf(parentId))
                 .setName(name)
-                .setStartTimeMillis(startMillis)
+                .setStarted(startMillis)
                 .build();
         requestObserver.onNext(req);
     }
@@ -81,7 +82,7 @@ class TracingSession {
         ensureConnection();
         Trace.Req req = Trace.Req.newBuilder()
                 .setId(toBuf(traceId))
-                .setEndTimeMillis(endMillis)
+                .setEnded(endMillis)
                 .build();
         requestObserver.onNext(req);
     }
