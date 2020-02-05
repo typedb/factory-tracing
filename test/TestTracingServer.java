@@ -1,11 +1,16 @@
-package grakn.grabl_tracing.test;
+package grabl.tracing.test;
 
-import grakn.grabl_tracing.protocol.TracingProto.Analysis;
-import grakn.grabl_tracing.protocol.TracingProto.Trace;
-import grakn.grabl_tracing.protocol.TracingServiceGrpc.TracingServiceImplBase;
+import grabl.tracing.protocol.TracingProto;
+import grabl.tracing.protocol.TracingProto.Analysis;
+import grabl.tracing.protocol.TracingProto.Trace;
+import grabl.tracing.protocol.TracingServiceGrpc.TracingServiceImplBase;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
+
+import java.util.UUID;
+
+import static grabl.tracing.util.ProtobufUUIDUtil.toBuf;
 
 public class TestTracingServer extends TracingServiceImplBase {
     private Server server;
@@ -21,8 +26,10 @@ public class TestTracingServer extends TracingServiceImplBase {
 
     @Override
     public void create(Analysis.Req request, StreamObserver<Analysis.Res> responseObserver) {
+        UUID id = UUID.randomUUID();
         Analysis.Res response = Analysis.Res.newBuilder()
-                .setAnalysisId(request.getOwner() + '/' + request.getRepo() + '#' + request.getCommit()).build();
+                .setAnalysisId(toBuf(id))
+                .build();
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }

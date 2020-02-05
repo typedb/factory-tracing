@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option java_package = "grakn.grabl_tracing.protocol";
+option java_package = "grabl.tracing.protocol";
 option java_outer_classname = "TracingProto";
 
 package protocol;
@@ -17,34 +17,36 @@ message Analysis {
         string commit = 3;
     }
     message Res {
-        string analysisId = 1;
+        bytes analysisId = 1;
     }
 }
 
+// Using big endian 128-bit UUIDs
 message Trace {
     message Req {
-        UUID id = 1;
-        oneof owner {
-            string analysisId = 2;
-            UUID parentTraceId = 3;
+        bytes id = 1;
+        bytes rootId = 2;
+
+        oneof start {
+            StartRoot rootStart = 3;
+            bytes parentId = 4;
         }
 
-        string name = 4;
+        string name = 6;
 
-        string tracker = 5;
-        uint32 iteration = 6;
-
-        uint64 startTimeMillis = 7;
-        uint64 endTimeMillis = 8;
+        uint64 started = 7;
+        uint64 ended = 8;
 
         string data = 9;
         repeated string labels = 10;
+
+        message StartRoot {
+            bytes analysisId = 1;
+
+            string tracker = 2;
+            uint32 iteration = 3;
+        }
     }
     message Res {
     }
-}
-
-message UUID {
-    fixed64 msb = 1;
-    fixed64 lsb = 2;
 }

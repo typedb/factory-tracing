@@ -1,31 +1,47 @@
-package grakn.grabl_tracing.test;
+package grabl.tracing.test;
 
-import grakn.grabl_tracing.GrablTracing;
+import grabl.tracing.client.GrablTracing;
+import grabl.tracing.client.GrablTracing.Analysis;
+import grabl.tracing.client.GrablTracing.Trace;
 
 public class TestTracingClient {
+
     public static void main(String args[]) {
-        try (GrablTracing tracing =
-                     new GrablTracing(args[0], "test")) {
+        int iterations = 10;
+        if (args.length > 1) {
+            iterations = Integer.parseInt(args[1]);
+        }
 
-            try (GrablTracing.Analysis analysis =
-                         tracing.analysis("testowner", "testrepo", "testcommit")) {
+        try (GrablTracing tracing = new GrablTracing(args[0], "testuser", "testtoken")) {
 
-                for (int i = 0; i < 10; ++i) {
-                    GrablTracing.Trace outerTrace = analysis.trace("test.root", "my:tracker", i);
-                    outerTrace.data("my data");
-                    outerTrace.labels("my", "labels");
+            Analysis analysis = tracing.analysis("testowner", "testrepo", "testcommit");
 
-                    GrablTracing.Trace innerTrace = outerTrace.trace("inner");
-                    innerTrace.data("my inner data");
-                    innerTrace.labels("my", "inner", "labels");
-                    innerTrace.end();
+            for (int i = 0; i < iterations; ++i) {
+                Trace outerTrace = analysis.trace("test.root", "my:tracker", i);
+                outerTrace.data("my data");
+                outerTrace.labels("my", "labels");
 
-                    outerTrace.end();
-                }
+                tracedFunction(Integer.parseInt(args[2]), Integer.parseInt(args[3]), outerTrace);
+
+                outerTrace.end();
             }
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
+        }
+    }
+
+    public static void tracedFunction(int depth, int width, Trace trace) {
+        if (depth > 0) {
+            for (int i = 0; i < width; i++) {
+                Trace inner = trace.trace("depth-" + depth + "-iter-" + i);
+
+                tracedFunction(depth - 1, width, inner);
+
+                inner.labels("label1", "label2");
+                inner.data("data");
+                inner.end();
+            }
         }
     }
 }
