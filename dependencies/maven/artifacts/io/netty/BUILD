@@ -63,7 +63,7 @@ java_library(
         ":netty-transport"
     ],
     visibility = [
-        "//dependencies/maven/artifacts:__subpackages__"
+        "//visibility:public"
     ]
 )
 
@@ -111,7 +111,7 @@ java_library(
         ":netty-transport"
     ],
     visibility = [
-        "//dependencies/maven/artifacts:__subpackages__"
+        "//visibility:public"
     ]
 )
 
@@ -147,6 +147,18 @@ java_library(
     ],
     visibility = [
         "//dependencies/maven/artifacts:__subpackages__"
+    ]
+)
+
+
+
+java_library(
+    name = "netty-tcnative-boringssl-static",
+    exports = [
+        "//external:jar/io/netty/netty-tcnative-boringssl-static"
+    ],
+    visibility = [
+        "//visibility:public"
     ]
 )
 

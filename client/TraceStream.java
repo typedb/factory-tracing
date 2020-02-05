@@ -1,16 +1,14 @@
-package grakn.grabl_tracing;
+package grabl.tracing.client;
 
-import java.util.Arrays;
-import java.util.Queue;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import grakn.grabl_tracing.protocol.TracingProto;
-import grakn.grabl_tracing.protocol.TracingProto.Trace;
-import grakn.grabl_tracing.protocol.TracingServiceGrpc.TracingServiceStub;
+import grabl.tracing.protocol.TracingProto.Trace;
+import grabl.tracing.protocol.TracingServiceGrpc.TracingServiceStub;
 import io.grpc.stub.StreamObserver;
+
+import static grabl.tracing.util.ProtobufUUIDUtil.toBuf;
 
 /**
  * The GRPC client layer for the tracing session.
@@ -23,26 +21,25 @@ import io.grpc.stub.StreamObserver;
  * For this setup to work, it is vital that all methods either call {@link #ensureConnection()} or check for errors
  * themselves and call {@link #throwErrors(String message)} directly.
  */
-class TracingSession {
-    private final UUID analysisId;
+class TraceStream {
     private final StreamObserver<Trace.Req> requestObserver;
     private final CountDownLatch finishLatch = new CountDownLatch(1);
 
-    private final Queue<Throwable> errors = new ConcurrentLinkedQueue<>();
+    private final List<Throwable> errors = new ArrayList<>();
 
-    TracingSession(TracingServiceStub serviceStub, UUID analysisId) {
-        this.analysisId = analysisId;
+    TraceStream(TracingServiceStub serviceStub) {
         requestObserver = serviceStub.stream(new TracingResponseObserver());
     }
 
-    void traceRootStart(UUID traceId, String name, String tracker, int iteration, long startMillis) {
+    void traceRootStart(UUID traceId, UUID analysisId, String name, String tracker, int iteration, long startMillis) {
         ensureConnection();
         Trace.Req req = Trace.Req.newBuilder()
                 .setId(toBuf(traceId))
-                .setAnalysisId(toBuf(analysisId))
+                .setRootStart(Trace.Req.StartRoot.newBuilder()
+                        .setAnalysisId(toBuf(analysisId))
+                        .setTracker(tracker)
+                        .setIteration(iteration))
                 .setName(name)
-                .setTracker(tracker)
-                .setIteration(iteration)
                 .setStarted(startMillis)
                 .build();
         requestObserver.onNext(req);
@@ -50,38 +47,41 @@ class TracingSession {
 
     void traceChildStart(UUID rootId, UUID traceId, UUID parentId, String name, long startMillis) {
         ensureConnection();
-        Trace.Req req = Trace.Req.newBuilder()
-                .setRootId(toBuf(rootId))
+        Trace.Req.Builder reqBuilder = Trace.Req.newBuilder()
                 .setId(toBuf(traceId))
-                .setParentTraceId(toBuf(parentId))
+                .setRootId(toBuf(rootId))
+                .setParentId(toBuf(parentId))
                 .setName(name)
-                .setStarted(startMillis)
-                .build();
-        requestObserver.onNext(req);
+                .setStarted(startMillis);
+
+        requestObserver.onNext(reqBuilder.build());
     }
 
-    void traceData(UUID traceId, String data) {
+    void traceData(UUID rootId, UUID traceId, String data) {
         ensureConnection();
         Trace.Req req = Trace.Req.newBuilder()
                 .setId(toBuf(traceId))
+                .setRootId(toBuf(rootId))
                 .setData(data)
                 .build();
         requestObserver.onNext(req);
     }
 
-    void traceLabels(UUID traceId, String[] labels) {
+    void traceLabels(UUID rootId, UUID traceId, String[] labels) {
         ensureConnection();
         Trace.Req req = Trace.Req.newBuilder()
                 .setId(toBuf(traceId))
+                .setRootId(toBuf(rootId))
                 .addAllLabels(Arrays.asList(labels))
                 .build();
         requestObserver.onNext(req);
     }
 
-    void traceEnd(UUID traceId, long endMillis) {
+    void traceEnd(UUID rootId, UUID traceId, long endMillis) {
         ensureConnection();
         Trace.Req req = Trace.Req.newBuilder()
                 .setId(toBuf(traceId))
+                .setRootId(toBuf(rootId))
                 .setEnded(endMillis)
                 .build();
         requestObserver.onNext(req);
@@ -97,21 +97,20 @@ class TracingSession {
             throw e;
         }
 
-        if (errors.peek() != null) {
-            throwErrors(TracingSession.class.getSimpleName() + " error");
+        if (errors.size() != 0) {
+            throwErrors(TraceStream.class.getSimpleName() + " error");
         }
     }
 
     private void ensureConnection() {
         if (finishLatch.getCount() == 0) {
-            throwErrors(TracingSession.class.getSimpleName() + " already closed or lost");
+            throwErrors(TraceStream.class.getSimpleName() + " already closed or lost");
         }
     }
 
     private void throwErrors(String message) {
         RuntimeException ex = new RuntimeException(message);
-        Throwable error;
-        while((error = errors.poll()) != null) {
+        for (Throwable error : errors) {
             ex.addSuppressed(error);
         }
         throw ex;
@@ -133,11 +132,5 @@ class TracingSession {
         public void onCompleted() {
             finishLatch.countDown();
         }
-    }
-
-    private static TracingProto.UUID.Builder toBuf(UUID uuid) {
-        return TracingProto.UUID.newBuilder()
-                .setMsb(uuid.getMostSignificantBits())
-                .setLsb(uuid.getLeastSignificantBits());
     }
 }
