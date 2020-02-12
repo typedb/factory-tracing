@@ -3,8 +3,6 @@ package grabl.tracing.test;
 import grabl.tracing.client.GrablTracing;
 import grabl.tracing.client.GrablTracing.Analysis;
 import grabl.tracing.client.GrablTracing.Trace;
-import grabl.tracing.client.Slf4jGrablTracing;
-import org.slf4j.LoggerFactory;
 
 import static grabl.tracing.client.GrablTracingFactory.unauthenticatedTracing;
 import static grabl.tracing.client.GrablTracingFactory.withSlf4jLogging;
