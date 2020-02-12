@@ -1,5 +1,5 @@
 java_library(
-    name = "grabl-tracing",
+    name = "client",
     srcs = glob(["*.java"]),
     deps = [
         "//protocol:protocol",
@@ -9,6 +9,7 @@ java_library(
         "//dependencies/maven/artifacts/io/grpc:grpc-protobuf",
         "//dependencies/maven/artifacts/io/grpc:grpc-stub",
         "//dependencies/maven/artifacts/io/grpc:grpc-api",
+        "//dependencies/maven/artifacts/org/slf4j:slf4j-api",
     ],
     runtime_deps = [
         "//dependencies/maven/artifacts/io/grpc:grpc-netty",

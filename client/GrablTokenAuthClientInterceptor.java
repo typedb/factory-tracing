@@ -2,7 +2,7 @@ package grabl.tracing.client;
 
 import io.grpc.*;
 
-public class GrablTokenAuthClientInterceptor implements ClientInterceptor {
+class GrablTokenAuthClientInterceptor implements ClientInterceptor {
 
     private static final Metadata.Key<String> USERNAME = Metadata.Key.of("username", Metadata.ASCII_STRING_MARSHALLER);
     private static final Metadata.Key<String> API_TOKEN = Metadata.Key.of("api-token", Metadata.ASCII_STRING_MARSHALLER);
@@ -10,7 +10,7 @@ public class GrablTokenAuthClientInterceptor implements ClientInterceptor {
     private final String username;
     private final String apiToken;
 
-    public GrablTokenAuthClientInterceptor(String username, String apiToken) {
+    GrablTokenAuthClientInterceptor(String username, String apiToken) {
         this.username = username;
         this.apiToken = apiToken;
     }

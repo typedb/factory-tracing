@@ -1,6 +1,5 @@
 package grabl.tracing.test;
 
-import grabl.tracing.protocol.TracingProto;
 import grabl.tracing.protocol.TracingProto.Analysis;
 import grabl.tracing.protocol.TracingProto.Trace;
 import grabl.tracing.protocol.TracingServiceGrpc.TracingServiceImplBase;
