@@ -58,6 +58,16 @@ class NoOpGrablTracing implements GrablTracing {
         public Trace end() {
             return LazyHolder.TRACE;
         }
+
+        @Override
+        public UUID getRootId() {
+            return null;
+        }
+
+        @Override
+        public UUID getId() {
+            return null;
+        }
     }
 
     private static class AnalysisImpl implements Analysis {

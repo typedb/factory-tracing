@@ -96,5 +96,15 @@ class StandardGrablTracing implements GrablTracing {
             stream.traceEnd(rootId, id, System.currentTimeMillis());
             return this;
         }
+
+        @Override
+        public UUID getRootId() {
+            return rootId;
+        }
+
+        @Override
+        public UUID getId() {
+            return id;
+        }
     }
 }

@@ -76,6 +76,16 @@ public class Slf4jGrablTracing implements GrablTracing {
             return wrapIfNecessary(innerTrace.end());
         }
 
+        @Override
+        public UUID getRootId() {
+            return innerTrace.getRootId();
+        }
+
+        @Override
+        public UUID getId() {
+            return innerTrace.getId();
+        }
+
         private TraceImpl wrapIfNecessary(Trace returnedTrace) {
             return returnedTrace == innerTrace ? this : new TraceImpl(returnedTrace, name);
         }

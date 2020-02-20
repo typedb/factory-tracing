@@ -15,5 +15,7 @@ public interface GrablTracing extends AutoCloseable {
         Trace data(String data);
         Trace labels(String... labels);
         Trace end();
+        UUID getRootId();
+        UUID getId();
     }
 }
