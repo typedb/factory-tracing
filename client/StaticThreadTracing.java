@@ -7,20 +7,30 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class StaticThreadTracing {
+
+    private static final ThreadTrace NOOP = new NoopThreadTrace();
+    private static final AtomicBoolean ENABLED = new AtomicBoolean(false);
 
     private static Analysis singletonAnalysis;
     private static final ThreadStack<ThreadContext> contextStack = new ThreadStack<>();
     private static final ThreadStack<ThreadTrace> traceStack = new ThreadStack<>();
 
     public static void setAnalysis(Analysis analysis) {
-        synchronized (StaticThreadTracing.class) {
+        if (ENABLED.compareAndSet(false, true)) {
             singletonAnalysis = analysis;
+        } else {
+            throw new IllegalStateException("Tried to set analysis twice");
         }
     }
 
     public static ThreadTrace traceOnThread(String name) {
+        if (!ENABLED.get()) {
+            return NOOP;
+        }
+
         ThreadTrace stacked = traceStack.peek();
         if (stacked != null) {
             return stacked.traceOnThread(name);
@@ -31,13 +41,7 @@ public class StaticThreadTracing {
             throw new IllegalStateException("No context found: must be in a ThreadContext");
         }
 
-        synchronized (StaticThreadTracing.class) {
-            if (singletonAnalysis != null) {
-                return new ThreadTrace(singletonAnalysis.trace(name, context.tracker, context.iteration));
-            }
-        }
-
-        throw new IllegalStateException("Cannot use static tracing without setting an analysis");
+        return new ThreadTraceImpl(singletonAnalysis.trace(name, context.tracker, context.iteration));
     }
 
     public static ThreadContext contextOnThread(String tracker, int iteration) {
@@ -52,16 +56,23 @@ public class StaticThreadTracing {
         return new ThreadContext(tracker, stacked.iteration);
     }
 
-    public static class ThreadTrace implements Trace, AutoCloseable {
+
+    public interface ThreadTrace extends Trace, AutoCloseable {
+        ThreadTrace traceOnThread(String name);
+    }
+
+
+    private static class ThreadTraceImpl implements ThreadTrace {
         private final Trace trace;
 
-        private ThreadTrace(Trace inner) {
+        private ThreadTraceImpl(Trace inner) {
             trace = inner;
             traceStack.push(this);
         }
 
+        @Override
         public ThreadTrace traceOnThread(String name) {
-            return new ThreadTrace(trace.trace(name));
+            return new ThreadTraceImpl(trace.trace(name));
         }
 
         @Override
@@ -106,6 +117,50 @@ public class StaticThreadTracing {
             }
         }
     }
+
+
+    private static class NoopThreadTrace implements ThreadTrace {
+
+        @Override
+        public ThreadTrace traceOnThread(String name) {
+            return NOOP;
+        }
+
+        @Override
+        public Trace trace(String name) {
+            return NOOP;
+        }
+
+        @Override
+        public Trace data(String data) {
+            return NOOP;
+        }
+
+        @Override
+        public Trace labels(String... labels) {
+            return NOOP;
+        }
+
+        @Override
+        public Trace end() {
+            return NOOP;
+        }
+
+        @Override
+        public UUID getRootId() {
+            return null;
+        }
+
+        @Override
+        public UUID getId() {
+            return null;
+        }
+
+        @Override
+        public void close() {
+        }
+    }
+
 
     public static class ThreadContext implements AutoCloseable {
         private final String tracker;
