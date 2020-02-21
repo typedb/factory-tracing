@@ -7,13 +7,13 @@ import java.util.UUID;
  *
  * Uses the Bill Pugh method of lazy singleton instantiation.
  */
-class NoOpGrablTracing implements GrablTracing {
+class GrablTracingNoOp implements GrablTracing {
 
-    private NoOpGrablTracing() {
+    private GrablTracingNoOp() {
     }
 
     private static class LazyHolder {
-        private static final NoOpGrablTracing TRACING = new NoOpGrablTracing();
+        private static final GrablTracingNoOp TRACING = new GrablTracingNoOp();
         private static final TraceImpl TRACE = new TraceImpl();
         private static final AnalysisImpl ANALYSIS = new AnalysisImpl();
     }

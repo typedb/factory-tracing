@@ -7,12 +7,12 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.UUID;
 
-public class Slf4jGrablTracing implements GrablTracing {
-    private static final Logger LOG = LoggerFactory.getLogger(Slf4jGrablTracing.class);
+public class GrablTracingSlf4j implements GrablTracing {
+    private static final Logger LOG = LoggerFactory.getLogger(GrablTracingSlf4j.class);
 
     private final GrablTracing innerTracing;
 
-    Slf4jGrablTracing(GrablTracing inner) {
+    GrablTracingSlf4j(GrablTracing inner) {
         innerTracing = inner;
     }
 
@@ -57,7 +57,7 @@ public class Slf4jGrablTracing implements GrablTracing {
         @Override
         public Trace data(String data) {
             LOG.trace("trace.data: {} {}", name, data);
-            return wrapIfNecessary(innerTrace.trace(data));
+            return wrapIfNecessary(innerTrace.data(data));
         }
 
         @Override

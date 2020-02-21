@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class StaticThreadTracing {
 
-    private static final ThreadTrace NOOP = new NoopThreadTrace();
+    private static final ThreadTrace NOOP = new ThreadTraceNoOp();
     private static final AtomicBoolean ENABLED = new AtomicBoolean(false);
 
     private static Analysis singletonAnalysis;
@@ -44,6 +44,14 @@ public class StaticThreadTracing {
         return new ThreadTraceImpl(singletonAnalysis.trace(name, context.tracker, context.iteration));
     }
 
+    public static ThreadTrace currentThreadTrace() {
+        if (!ENABLED.get()) {
+            return NOOP;
+        }
+
+        return traceStack.peek();
+    }
+
     public static ThreadContext contextOnThread(String tracker, int iteration) {
         return new ThreadContext(tracker, iteration);
     }
@@ -59,6 +67,9 @@ public class StaticThreadTracing {
 
     public interface ThreadTrace extends Trace, AutoCloseable {
         ThreadTrace traceOnThread(String name);
+
+        @Override
+        void close();
     }
 
 
@@ -119,7 +130,7 @@ public class StaticThreadTracing {
     }
 
 
-    private static class NoopThreadTrace implements ThreadTrace {
+    private static class ThreadTraceNoOp implements ThreadTrace {
 
         @Override
         public ThreadTrace traceOnThread(String name) {

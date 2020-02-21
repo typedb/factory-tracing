@@ -23,14 +23,8 @@ workspace(name = "grabl_tracing")
 # Load Grakn Labs dependencies #
 ################################
 
-load("//dependencies/graknlabs:dependencies.bzl", "graknlabs_grakn_core", "graknlabs_client_java", "graknlabs_build_tools")
-graknlabs_grakn_core()
-graknlabs_client_java()
+load("//dependencies/graknlabs:dependencies.bzl", "graknlabs_build_tools")
 graknlabs_build_tools()
-
-load("@graknlabs_grakn_core//dependencies/graknlabs:dependencies.bzl", "graknlabs_graql", "graknlabs_protocol")
-graknlabs_graql()
-graknlabs_protocol()
 
 load("@graknlabs_build_tools//distribution:dependencies.bzl", "graknlabs_bazel_distribution")
 graknlabs_bazel_distribution()
@@ -90,45 +84,3 @@ com_github_grpc_grpc_deps()
 
 load("@stackb_rules_proto//java:deps.bzl", "java_grpc_compile")
 java_grpc_compile()
-
-
-################################
-# Load Grakn Core Dependencies #
-################################
-
-load("@graknlabs_grakn_core//dependencies/graknlabs:dependencies.bzl",
-"graknlabs_common", "graknlabs_console", "graknlabs_benchmark")
-graknlabs_common()
-graknlabs_console()
-graknlabs_benchmark()
-
-load("@graknlabs_grakn_core//dependencies/maven:dependencies.bzl",
-graknlabs_grakn_core_maven_dependencies = "maven_dependencies")
-graknlabs_grakn_core_maven_dependencies()
-
-load("@graknlabs_benchmark//dependencies/maven:dependencies.bzl",
-graknlabs_benchmark_maven_dependencies = "maven_dependencies")
-graknlabs_benchmark_maven_dependencies()
-
-load("@graknlabs_build_tools//bazel:dependencies.bzl", "bazel_rules_docker")
-bazel_rules_docker()
-
-load("@graknlabs_bazel_distribution//common:dependencies.bzl", "bazelbuild_rules_pkg")
-bazelbuild_rules_pkg()
-
-
-###########################
-# Load Graql Dependencies #
-###########################
-
-# for Bazel
-load("@graknlabs_graql//dependencies/compilers:dependencies.bzl", "antlr_dependencies")
-antlr_dependencies()
-
-# for ANTLR programs
-load("@rules_antlr//antlr:deps.bzl", "antlr_dependencies")
-antlr_dependencies()
-
-load("@graknlabs_graql//dependencies/maven:dependencies.bzl",
-graknlabs_graql_maven_dependencies = "maven_dependencies")
-graknlabs_graql_maven_dependencies()

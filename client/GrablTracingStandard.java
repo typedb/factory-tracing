@@ -10,15 +10,16 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static grabl.tracing.util.ProtobufUUIDUtil.fromBuf;
+import static java.util.Objects.requireNonNull;
 
-class StandardGrablTracing implements GrablTracing {
+class GrablTracingStandard implements GrablTracing {
     private final ManagedChannel channel;
     private final TracingServiceBlockingStub tracingServiceBlockingStub;
     private final TracingServiceStub tracingServiceStub;
 
     private final TraceStream stream;
 
-    StandardGrablTracing(ManagedChannel channel) {
+    GrablTracingStandard(ManagedChannel channel) {
         this.channel = channel;
         tracingServiceBlockingStub = TracingServiceGrpc.newBlockingStub(channel);
         tracingServiceStub = TracingServiceGrpc.newStub(channel);
@@ -26,10 +27,16 @@ class StandardGrablTracing implements GrablTracing {
     }
 
     public Trace trace(UUID rootId, UUID parentId, String name) {
+        requireNonNull(rootId, "Cannot use null rootId");
+        requireNonNull(parentId, "Cannot use null traceId");
+        requireNonNull(name, "Cannot use null name");
         return new TraceImpl(rootId, parentId, name);
     }
 
     public Analysis analysis(String owner, String repo, String commit) {
+        requireNonNull(owner, "Cannot use null owner");
+        requireNonNull(repo, "Cannot use null repo");
+        requireNonNull(commit, "Cannot use null commit");
         return new AnalysisImpl(owner, repo, commit);
     }
 
@@ -58,6 +65,8 @@ class StandardGrablTracing implements GrablTracing {
         }
 
         public Trace trace(String name, String tracker, int iteration) {
+            requireNonNull(name, "Cannot use null name");
+            requireNonNull(tracker, "Cannot use null tracker");
             return new TraceImpl(analysisId, name, tracker, iteration);
         }
     }
@@ -79,10 +88,12 @@ class StandardGrablTracing implements GrablTracing {
         }
 
         public Trace trace(String name) {
+            requireNonNull(name, "Cannot use null name");
             return new TraceImpl(rootId, id, name);
         }
 
         public Trace data(String data) {
+            requireNonNull(data, "Cannot use null data");
             stream.traceData(rootId, id, data);
             return this;
         }

@@ -16,7 +16,7 @@ public class GrablTracingFactory {
      * @return A GrablTracing instance that has securely connected to your Grabl server.
      */
     public static GrablTracing secureTracing(String grablUri, String username, String apiToken) {
-        return new StandardGrablTracing(
+        return new GrablTracingStandard(
                 ManagedChannelBuilder.forTarget(grablUri)
                 .useTransportSecurity()
                 .intercept(new GrablTokenAuthClientInterceptor(username, apiToken))
@@ -32,7 +32,7 @@ public class GrablTracingFactory {
      * @return A GrablTracing instance that has connected to your server without any authentication.
      */
     public static GrablTracing unauthenticatedTracing(String grablUri) {
-        return new StandardGrablTracing(
+        return new GrablTracingStandard(
                 ManagedChannelBuilder.forTarget(grablUri)
                 .usePlaintext()
                 .build()
@@ -46,7 +46,7 @@ public class GrablTracingFactory {
      * @return a GrablTracing that does nothing.
      */
     public static GrablTracing noopTracing() {
-        return NoOpGrablTracing.getInstance();
+        return GrablTracingNoOp.getInstance();
     }
 
     /**
@@ -56,6 +56,6 @@ public class GrablTracingFactory {
      * @return
      */
     public static GrablTracing withSlf4jLogging(GrablTracing inner) {
-        return new Slf4jGrablTracing(inner);
+        return new GrablTracingSlf4j(inner);
     }
 }
