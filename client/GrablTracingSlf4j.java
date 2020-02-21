@@ -12,8 +12,16 @@ public class GrablTracingSlf4j implements GrablTracing {
 
     private final GrablTracing innerTracing;
 
-    GrablTracingSlf4j(GrablTracing inner) {
+    private GrablTracingSlf4j(GrablTracing inner) {
         innerTracing = inner;
+    }
+
+    static GrablTracing wrapIfLoggingEnabled(GrablTracing inner) {
+        if (LOG.isTraceEnabled()) {
+            return new GrablTracingSlf4j(inner);
+        } else {
+            return inner;
+        }
     }
 
     @Override

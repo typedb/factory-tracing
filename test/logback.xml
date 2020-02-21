@@ -8,7 +8,7 @@
         </encoder>
     </appender>
 
-    <logger name="grabl.tracing.client.Slf4jGrablTracing" level="TRACE" />
+    <logger name="grabl.tracing.client.GrablTracingSlf4j" level="TRACE" />
     <logger name="grabl.tracing" level="DEBUG" />
 
     <root level="INFO">

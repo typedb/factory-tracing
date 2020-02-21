@@ -4,8 +4,8 @@ import grabl.tracing.client.GrablTracing;
 import grabl.tracing.client.GrablTracing.Analysis;
 import grabl.tracing.client.GrablTracing.Trace;
 
-import static grabl.tracing.client.GrablTracingFactory.unauthenticatedTracing;
-import static grabl.tracing.client.GrablTracingFactory.withSlf4jLogging;
+import static grabl.tracing.client.GrablTracingFactory.tracing;
+import static grabl.tracing.client.GrablTracingFactory.withLogging;
 
 public class TestTracingClient {
 
@@ -15,7 +15,7 @@ public class TestTracingClient {
             iterations = Integer.parseInt(args[1]);
         }
 
-        try (GrablTracing tracing = withSlf4jLogging(unauthenticatedTracing(args[0]))) {
+        try (GrablTracing tracing = withLogging(tracing(args[0]))) {
 
             Analysis analysis = tracing.analysis("testowner", "testrepo", "testcommit");
 

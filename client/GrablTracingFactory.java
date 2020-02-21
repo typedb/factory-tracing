@@ -13,9 +13,9 @@ public class GrablTracingFactory {
      * @param grablUri The URI of your Grabl server.
      * @param username Your username on the Grabl server.
      * @param apiToken Your API token for the username.
-     * @return A GrablTracing instance that has securely connected to your Grabl server.
+     * @return An instance that has securely connected to your Grabl server.
      */
-    public static GrablTracing secureTracing(String grablUri, String username, String apiToken) {
+    public static GrablTracing tracing(String grablUri, String username, String apiToken) {
         return new GrablTracingStandard(
                 ManagedChannelBuilder.forTarget(grablUri)
                 .useTransportSecurity()
@@ -29,9 +29,9 @@ public class GrablTracingFactory {
      * applications.
      *
      * @param grablUri The URI of your test tracing server.
-     * @return A GrablTracing instance that has connected to your server without any authentication.
+     * @return An instance that has connected to your server without any authentication.
      */
-    public static GrablTracing unauthenticatedTracing(String grablUri) {
+    public static GrablTracing tracing(String grablUri) {
         return new GrablTracingStandard(
                 ManagedChannelBuilder.forTarget(grablUri)
                 .usePlaintext()
@@ -40,22 +40,23 @@ public class GrablTracingFactory {
     }
 
     /**
-     * Get a GrablTracing that can be used to safely run tracing-enabled applications with no connection and no
+     * Get a GrablTracing that can be used to safely run tracing-enabled applications with no connection and minimal
      * associated overhead.
      *
-     * @return a GrablTracing that does nothing.
+     * @return an instance that does nothing but adheres to the {@link GrablTracing} contract sufficiently to work with
+     *      any code that does tracing.
      */
-    public static GrablTracing noopTracing() {
+    public static GrablTracing noOpTracing() {
         return GrablTracingNoOp.getInstance();
     }
 
     /**
-     * Decorate a GrablTracing with Slf4j logging.
+     * Decorate a GrablTracing with Slf4j logging (if the logging is enabled to the correct level).
      *
-     * @param inner The actual GrablTracing that underlies this implementation
-     * @return
+     * @param inner The actual GrablTracing that underlies this implementation.
+     * @return If logging is enabled, a wrapped instance that logs to Slf4j, otherwise the instance {@param inner}.
      */
-    public static GrablTracing withSlf4jLogging(GrablTracing inner) {
-        return new GrablTracingSlf4j(inner);
+    public static GrablTracing withLogging(GrablTracing inner) {
+        return GrablTracingSlf4j.wrapIfLoggingEnabled(inner);
     }
 }
