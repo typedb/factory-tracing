@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * ongoing in the application, but the advantage is that the application does not have to pass around trace parameters
  * or extend internal APIs, making adding tracing to an existing application as a cross-cutting concern much easier.
  */
-public class StaticThreadTracing {
+public class GrablTracingThreadStatic {
 
     private static final String EMPTY = "";
 
@@ -98,7 +98,7 @@ public class StaticThreadTracing {
      */
     public interface ThreadTrace extends Trace, AutoCloseable {
         /**
-         * Behaves the same way as {@link StaticThreadTracing#traceOnThread(String)} but specifically creates a child
+         * Behaves the same way as {@link GrablTracingThreadStatic#traceOnThread(String)} but specifically creates a child
          * of this {@link ThreadTrace} for the local thread rather than a child of the current thread trace.
          *
          * @param name The trace name.
