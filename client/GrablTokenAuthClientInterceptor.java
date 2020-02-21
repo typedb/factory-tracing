@@ -2,6 +2,10 @@ package grabl.tracing.client;
 
 import io.grpc.*;
 
+/**
+ * A GRPC {@link ClientInterceptor} that adds the username and api-token to the metadata for every rpc so that the
+ * grabl tracing server can authenticate us.
+ */
 class GrablTokenAuthClientInterceptor implements ClientInterceptor {
 
     private static final Metadata.Key<String> USERNAME = Metadata.Key.of("username", Metadata.ASCII_STRING_MARSHALLER);
