@@ -4,15 +4,18 @@ import grabl.tracing.client.GrablTracing;
 import grabl.tracing.client.GrablTracing.Analysis;
 import grabl.tracing.client.GrablTracing.Trace;
 
+import static grabl.tracing.client.GrablTracingFactory.tracing;
+import static grabl.tracing.client.GrablTracingFactory.withLogging;
+
 public class TestTracingClient {
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         int iterations = 10;
         if (args.length > 1) {
             iterations = Integer.parseInt(args[1]);
         }
 
-        try (GrablTracing tracing = new GrablTracing(args[0], "testuser", "testtoken")) {
+        try (GrablTracing tracing = withLogging(tracing(args[0]))) {
 
             Analysis analysis = tracing.analysis("testowner", "testrepo", "testcommit");
 
@@ -31,7 +34,7 @@ public class TestTracingClient {
         }
     }
 
-    public static void tracedFunction(int depth, int width, Trace trace) {
+    private static void tracedFunction(int depth, int width, Trace trace) {
         if (depth > 0) {
             for (int i = 0; i < width; i++) {
                 Trace inner = trace.trace("depth-" + depth + "-iter-" + i);

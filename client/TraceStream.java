@@ -2,7 +2,10 @@ package grabl.tracing.client;
 
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import grabl.tracing.protocol.TracingProto.Trace;
 import grabl.tracing.protocol.TracingServiceGrpc.TracingServiceStub;
@@ -18,20 +21,22 @@ import static grabl.tracing.util.ProtobufUUIDUtil.toBuf;
  * potential to be confusing, since a server-side issue caused by the client might not be related to the point when the
  * RuntimeException appears to be thrown. The hope is that the (suppressed) exceptions passed on will still be useful.
  *
- * For this setup to work, it is vital that all methods either call {@link #ensureConnection()} or check for errors
- * themselves and call {@link #throwErrors(String message)} directly.
+ * For this setup to work, it is vital that all methods either call {@link #ensureConnection()} or call
+ * {@link #throwErrors()} directly.
  */
 class TraceStream {
     private final StreamObserver<Trace.Req> requestObserver;
     private final CountDownLatch finishLatch = new CountDownLatch(1);
 
-    private final List<Throwable> errors = new ArrayList<>();
+    private final Deque<Throwable> errors = new ArrayDeque<>();
 
     TraceStream(TracingServiceStub serviceStub) {
         requestObserver = serviceStub.stream(new TracingResponseObserver());
     }
 
     void traceRootStart(UUID traceId, UUID analysisId, String name, String tracker, int iteration, long startMillis) {
+        assert traceId != null;
+        assert analysisId != null;
         ensureConnection();
         Trace.Req req = Trace.Req.newBuilder()
                 .setId(toBuf(traceId))
@@ -42,49 +47,67 @@ class TraceStream {
                 .setName(name)
                 .setStarted(startMillis)
                 .build();
-        requestObserver.onNext(req);
+        synchronized (this) {
+            requestObserver.onNext(req);
+        }
     }
 
     void traceChildStart(UUID rootId, UUID traceId, UUID parentId, String name, long startMillis) {
+        assert rootId != null;
+        assert traceId != null;
         ensureConnection();
-        Trace.Req.Builder reqBuilder = Trace.Req.newBuilder()
+        Trace.Req req = Trace.Req.newBuilder()
                 .setId(toBuf(traceId))
                 .setRootId(toBuf(rootId))
                 .setParentId(toBuf(parentId))
                 .setName(name)
-                .setStarted(startMillis);
-
-        requestObserver.onNext(reqBuilder.build());
+                .setStarted(startMillis)
+                .build();
+        synchronized (this) {
+            requestObserver.onNext(req);
+        }
     }
 
     void traceData(UUID rootId, UUID traceId, String data) {
+        assert rootId != null;
+        assert traceId != null;
         ensureConnection();
         Trace.Req req = Trace.Req.newBuilder()
                 .setId(toBuf(traceId))
                 .setRootId(toBuf(rootId))
                 .setData(data)
                 .build();
-        requestObserver.onNext(req);
+        synchronized (this) {
+            requestObserver.onNext(req);
+        }
     }
 
     void traceLabels(UUID rootId, UUID traceId, String[] labels) {
+        assert rootId != null;
+        assert traceId != null;
         ensureConnection();
         Trace.Req req = Trace.Req.newBuilder()
                 .setId(toBuf(traceId))
                 .setRootId(toBuf(rootId))
                 .addAllLabels(Arrays.asList(labels))
                 .build();
-        requestObserver.onNext(req);
+        synchronized (this) {
+            requestObserver.onNext(req);
+        }
     }
 
     void traceEnd(UUID rootId, UUID traceId, long endMillis) {
+        assert rootId != null;
+        assert traceId != null;
         ensureConnection();
         Trace.Req req = Trace.Req.newBuilder()
                 .setId(toBuf(traceId))
                 .setRootId(toBuf(rootId))
                 .setEnded(endMillis)
                 .build();
-        requestObserver.onNext(req);
+        synchronized (this) {
+            requestObserver.onNext(req);
+        }
     }
 
     void close() throws Exception {
@@ -97,23 +120,24 @@ class TraceStream {
             throw e;
         }
 
-        if (errors.size() != 0) {
-            throwErrors(TraceStream.class.getSimpleName() + " error");
-        }
+        throwErrors();
     }
 
     private void ensureConnection() {
         if (finishLatch.getCount() == 0) {
-            throwErrors(TraceStream.class.getSimpleName() + " already closed or lost");
+            errors.add(new RuntimeException("Connection Lost"));
+            throwErrors();
         }
     }
 
-    private void throwErrors(String message) {
-        RuntimeException ex = new RuntimeException(message);
-        for (Throwable error : errors) {
-            ex.addSuppressed(error);
+    private synchronized void throwErrors() {
+        if (errors.peek() != null) {
+            RuntimeException ex = new RuntimeException(errors.pop());
+            while (errors.peek() != null) {
+                ex.addSuppressed(errors.pop());
+            }
+            throw ex;
         }
-        throw ex;
     }
 
     private class TracingResponseObserver implements StreamObserver<Trace.Res> {
