@@ -4,8 +4,8 @@ import grabl.tracing.client.GrablTracing;
 import grabl.tracing.client.GrablTracing.Analysis;
 import grabl.tracing.client.GrablTracing.Trace;
 
-import static grabl.tracing.client.GrablTracingFactory.tracing;
-import static grabl.tracing.client.GrablTracingFactory.withLogging;
+import static grabl.tracing.client.GrablTracing.tracing;
+import static grabl.tracing.client.GrablTracing.withLogging;
 
 public class TestTracingClient {
 
