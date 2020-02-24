@@ -144,7 +144,7 @@ public interface GrablTracing extends AutoCloseable {
      * @return an instance that does nothing but adheres to the {@link GrablTracing} contract sufficiently to work with
      *      any code that does tracing.
      */
-    static GrablTracing noOpTracing() {
+    static GrablTracing tracingNoOp() {
         return GrablTracingNoOp.getInstance();
     }
 
