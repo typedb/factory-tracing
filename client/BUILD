@@ -18,4 +18,5 @@ java_library(
         "//dependencies/maven/artifacts/io/netty:netty-tcnative-boringssl-static",
     ],
     visibility = ["//visibility:public"],
+    tags = ["maven_coordinates=io.grabl.tracing:grabl-tracing-client:{pom_version}"],
 )

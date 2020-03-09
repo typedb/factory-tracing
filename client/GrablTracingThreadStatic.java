@@ -18,23 +18,46 @@ public class GrablTracingThreadStatic {
 
     private static final String EMPTY = "";
 
-    private static final ThreadTrace NOOP = new ThreadTraceNoOp();
-    private static final AtomicBoolean ENABLED = new AtomicBoolean(false);
+    private static final ThreadTrace THREAD_TRACE_NO_OP = new ThreadTraceNoOp();
+    private static final ThreadContext THREAD_CONTEXT_NO_OP = new ThreadContextNoOp();
 
+    private static final AtomicBoolean ENABLED = new AtomicBoolean(false);
+    private static final AtomicBoolean ANALYSIS_SET = new AtomicBoolean(false);
+
+    private static GrablTracing singletonClient;
     private static Analysis singletonAnalysis;
+
     private static final ThreadStack<ThreadContext> contextStack = new ThreadStack<>();
     private static final ThreadStack<ThreadTrace> traceStack = new ThreadStack<>();
 
     /**
      * Set the Analysis for the application and enable tracing globally beyond this point.
      *
-     * @param analysis The Grabl tracing analysis to set.
+     * @param client The Grabl tracing client to set.
      */
-    public synchronized static void setAnalysis(Analysis analysis) {
+    public synchronized static void setGlobalTracingClient(GrablTracing client) {
         if (ENABLED.compareAndSet(false, true)) {
-            singletonAnalysis = analysis;
+            singletonClient = client;
         } else {
-            throw new IllegalStateException("Tried to set analysis twice");
+            throw new IllegalStateException("Tried to set global Grabl tracing client twice");
+        }
+    }
+
+    /**
+     * Set the Analysis for the application and enable tracing globally beyond this point.
+     *
+     * @param owner The Grabl tracing repo owner to set.
+     * @param repo The Grabl tracing repo to set.
+     * @param commit The Grabl tracing commit to set.
+     */
+    public synchronized static void openGlobalAnalysis(String owner, String repo, String commit) {
+        if (!ENABLED.get()) {
+            throw new IllegalStateException("Tried to open analysis without setting a global tracing client");
+        }
+        if (ANALYSIS_SET.compareAndSet(false, true)) {
+            singletonAnalysis = singletonClient.analysis(owner, repo, commit);
+        } else {
+            throw new IllegalStateException("Tried to open global analysis twice");
         }
     }
 
@@ -52,8 +75,8 @@ public class GrablTracingThreadStatic {
      * @return A try-with-resources representation of the Trace and its existence on the thread's stack.
      */
     public static ThreadTrace traceOnThread(String name) {
-        if (!ENABLED.get()) {
-            return NOOP;
+        if (!ANALYSIS_SET.get()) {
+            return THREAD_TRACE_NO_OP;
         }
 
         ThreadTrace stacked = traceStack.peek();
@@ -70,13 +93,29 @@ public class GrablTracingThreadStatic {
     }
 
     /**
+     * Open a trace continuing from a parent that may have been distributed across a network.
+     *
+     * @param rootId The parent trace rootId (identifies the trace tree).
+     * @param parentId The parent trace id.
+     * @param name The trace name.
+     * @return A try-with-resources representation of the Trace and its existence on the thread's stack.
+     */
+    public static ThreadTrace continueTraceOnThread(UUID rootId, UUID parentId, String name) {
+        if (!ENABLED.get()) {
+            return THREAD_TRACE_NO_OP;
+        }
+
+        return new ThreadTraceImpl(singletonClient.trace(rootId, parentId, name));
+    }
+
+    /**
      * Gets the current trace for the thread.
      *
      * @return The current trace for the thread, null if none exists.
      */
     public static ThreadTrace currentThreadTrace() {
         if (!ENABLED.get()) {
-            return NOOP;
+            return THREAD_TRACE_NO_OP;
         }
 
         return traceStack.peek();
@@ -90,7 +129,21 @@ public class GrablTracingThreadStatic {
      * @return A try-with-resources instance to control the lifetime of this context information on the thread's stack.
      */
     public static ThreadContext contextOnThread(String tracker, int iteration) {
-        return new ThreadContextImpl(tracker, iteration);
+        if (ENABLED.get()) {
+            return new ThreadContextImpl(tracker, iteration);
+        } else {
+            return THREAD_CONTEXT_NO_OP;
+        }
+    }
+
+    /**
+     * Discover whether or not tracing is enabled, useful to decide whether or not to perform some calculations that
+     * are specific to tracing.
+     *
+     * @return true if tracing is enabled, false if running in no-op mode
+     */
+    public static boolean isTracingEnabled() {
+        return ENABLED.get();
     }
 
     /**
@@ -184,27 +237,27 @@ public class GrablTracingThreadStatic {
 
         @Override
         public ThreadTrace traceOnThread(String name) {
-            return NOOP;
+            return THREAD_TRACE_NO_OP;
         }
 
         @Override
         public Trace trace(String name) {
-            return NOOP;
+            return THREAD_TRACE_NO_OP;
         }
 
         @Override
         public Trace data(String data) {
-            return NOOP;
+            return THREAD_TRACE_NO_OP;
         }
 
         @Override
         public Trace labels(String... labels) {
-            return NOOP;
+            return THREAD_TRACE_NO_OP;
         }
 
         @Override
         public Trace end() {
-            return NOOP;
+            return THREAD_TRACE_NO_OP;
         }
 
         @Override
@@ -253,7 +306,7 @@ public class GrablTracingThreadStatic {
     }
 
 
-    private class ThreadContextNoOp implements ThreadContext {
+    private static class ThreadContextNoOp implements ThreadContext {
 
         @Override
         public String getTracker() {
