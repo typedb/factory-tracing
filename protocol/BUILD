@@ -25,4 +25,5 @@ java_library(
         "//dependencies/maven/artifacts/io/grpc:grpc-stub",
         "//dependencies/maven/artifacts/io/grpc:grpc-api",
     ],
+    tags = ["maven_coordinates=io.grabl.tracing:grabl-tracing-protocol:{pom_version}"],
 )
