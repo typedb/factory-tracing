@@ -44,6 +44,15 @@ public class GrablTracingThreadStatic {
     }
 
     /**
+     * Get the current singleton grabl tracing client. The user should always call {@link #isTracingEnabled()} first.
+     *
+     * @return the singleton grabl tracing client
+     */
+    public static GrablTracing getGrablTracing() {
+        return singletonClient;
+    }
+
+    /**
      * Set the Analysis for the application and enable tracing globally beyond this point.
      *
      * @param owner The Grabl tracing repo owner to set.
