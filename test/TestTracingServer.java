@@ -25,20 +25,24 @@ public class TestTracingServer extends TracingServiceImplBase {
 
     @Override
     public void create(Analysis.Req request, StreamObserver<Analysis.Res> responseObserver) {
+        System.out.println("Create Request: " + request);
         UUID id = UUID.randomUUID();
         Analysis.Res response = Analysis.Res.newBuilder()
                 .setAnalysisId(toBuf(id))
                 .build();
+        System.out.println("Create Response: " + response);
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
 
     @Override
     public StreamObserver<Trace.Req> stream(StreamObserver<Trace.Res> responseObserver) {
+        System.out.println("Trace Stream Started");
+
         return new StreamObserver<Trace.Req>() {
             @Override
             public void onNext(Trace.Req req) {
-                System.out.print(req);
+                System.out.print("Trace Request: " + req);
             }
 
             @Override
@@ -49,6 +53,7 @@ public class TestTracingServer extends TracingServiceImplBase {
             @Override
             public void onCompleted() {
                 responseObserver.onNext(Trace.Res.newBuilder().build());
+                System.out.println("Trace Stream Completed");
                 responseObserver.onCompleted();
             }
         };
