@@ -84,13 +84,17 @@ public class GrablTracingThreadStatic {
      * @return A try-with-resources representation of the Trace and its existence on the thread's stack.
      */
     public static ThreadTrace traceOnThread(String name) {
-        if (!ANALYSIS_SET.get()) {
+        if (!ENABLED.get()) {
             return THREAD_TRACE_NO_OP;
         }
 
         ThreadTrace stacked = traceStack.peek();
         if (stacked != null) {
             return stacked.traceOnThread(name);
+        }
+
+        if (!ANALYSIS_SET.get()) {
+            return THREAD_TRACE_NO_OP;
         }
 
         ThreadContext context = contextStack.peek();
