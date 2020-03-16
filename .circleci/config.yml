@@ -174,11 +174,7 @@ workflows:
           requires:
             - build
             - build-checkstyle
-            - test-concept
-            - test-answer
-            - test-keyspace
-            - test-session
-            - test-transaction
+#            - test-concept
       - test-deployment-maven:
           filters:
             branches:
