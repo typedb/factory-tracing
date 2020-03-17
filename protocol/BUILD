@@ -35,10 +35,10 @@ java_grpc_compile(
 
 java_library(
     name = "protocol",
-    srcs = glob([
+    srcs = [
         ":protocol-src",
-        "util/*.java",
-    ]),
+        "util/ProtobufUUIDUtil.java",
+    ],
     deps = [
         "//dependencies/maven/artifacts/com/google/guava",
         "//dependencies/maven/artifacts/com/google/protobuf:protobuf-java",
@@ -51,7 +51,7 @@ java_library(
 )
 
 assemble_maven(
-    name = "assemble-maven-protocol",
+    name = "assemble-maven",
     target = "//protocol",
     package = "",
     workspace_refs = "@graknlabs_grabl_tracing_workspace_refs//:refs.json",
