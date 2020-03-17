@@ -146,7 +146,6 @@ workflows:
               only: master
           requires:
             - build
-            - build-checkstyle
       - test-deployment-maven:
           filters:
             branches:
