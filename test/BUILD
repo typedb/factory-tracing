@@ -2,7 +2,8 @@ java_binary(
     name = "server",
     srcs = ["TestTracingServer.java"],
     deps = [
-        "//client",
+        "//protocol",
+        "//util",
         "//dependencies/maven/artifacts/com/google/protobuf:protobuf-java",
         "//dependencies/maven/artifacts/io/grpc:grpc-core",
         "//dependencies/maven/artifacts/io/grpc:grpc-protobuf",
@@ -11,8 +12,6 @@ java_binary(
     ],
     main_class = "grabl.tracing.test.TestTracingServer",
     runtime_deps = [
-        "//protocol",
-        "//util",
         "//dependencies/maven/artifacts/io/grpc:grpc-netty",
         "//dependencies/maven/artifacts/io/netty:netty-codec-http2",
         "//dependencies/maven/artifacts/io/netty:netty-handler",
@@ -25,8 +24,7 @@ java_binary(
     srcs = ["TestTracingClient.java"],
     classpath_resources = ["logback.xml"],
     deps = [
-        "//protocol",
-        "//util",
+        "//client",
         "//dependencies/maven/artifacts/com/google/protobuf:protobuf-java",
         "//dependencies/maven/artifacts/io/grpc:grpc-core",
         "//dependencies/maven/artifacts/io/grpc:grpc-protobuf",
@@ -36,6 +34,8 @@ java_binary(
     ],
     main_class = "grabl.tracing.test.TestTracingClient",
     runtime_deps = [
+        "//protocol",
+        "//util",
         "//dependencies/maven/artifacts/io/grpc:grpc-netty",
         "//dependencies/maven/artifacts/io/netty:netty-codec-http2",
         "//dependencies/maven/artifacts/io/netty:netty-handler",
