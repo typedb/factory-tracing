@@ -86,6 +86,14 @@ load("@stackb_rules_proto//java:deps.bzl", "java_grpc_compile")
 java_grpc_compile()
 
 
+##################################
+# Load distribution dependencies #
+##################################
+
+load("@graknlabs_bazel_distribution//common:dependencies.bzl", "bazelbuild_rules_pkg")
+bazelbuild_rules_pkg()
+
+
 #####################################
 # Load Bazel common workspace rules #
 #####################################
