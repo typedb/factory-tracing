@@ -44,6 +44,15 @@ jobs:
           command: bazel build //...
       - run: bazel run @graknlabs_build_tools//unused_deps -- list
 
+  test-client:
+    machine: true
+    working_directory: ~/grabl-tracing
+    steps:
+      - install-bazel-linux-rbe
+      - checkout
+      - run-bazel-rbe:
+          command: bazel test //client/test --test_output=errors
+
   deploy-maven-snapshot:
     machine: true
     working_directory: ~/grabl-tracing
@@ -140,12 +149,17 @@ workflows:
           filters:
             branches:
               ignore: grabl-tracing-release-branch
+      - test-client:
+          filters:
+            branches:
+              ignore: grabl-tracing-release-branch
       - deploy-maven-snapshot:
           filters:
             branches:
               only: master
           requires:
             - build
+            - test-client
       - test-deployment-maven:
           filters:
             branches:

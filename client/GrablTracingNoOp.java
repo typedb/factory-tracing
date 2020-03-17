@@ -7,7 +7,7 @@ import java.util.UUID;
  *
  * Uses the Bill Pugh method of lazy singleton instantiation.
  */
-class GrablTracingNoOp implements GrablTracing {
+public class GrablTracingNoOp implements GrablTracing {
 
     private GrablTracingNoOp() {
     }

@@ -1,6 +1,6 @@
 java_binary(
     name = "server",
-    srcs = ["TestTracingServer.java"],
+    srcs = ["ExampleTracingServer.java"],
     deps = [
         "//protocol",
         "//util",
@@ -21,7 +21,7 @@ java_binary(
 
 java_binary(
     name = "client",
-    srcs = ["TestTracingClient.java"],
+    srcs = ["ExampleTracingClient.java"],
     classpath_resources = ["logback.xml"],
     deps = [
         "//client",

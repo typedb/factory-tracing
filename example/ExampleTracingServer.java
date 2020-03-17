@@ -1,4 +1,4 @@
-package grabl.tracing.test;
+package grabl.tracing.example;
 
 import grabl.tracing.protocol.TracingProto.Analysis;
 import grabl.tracing.protocol.TracingProto.Trace;
@@ -11,10 +11,10 @@ import java.util.UUID;
 
 import static grabl.tracing.util.ProtobufUUIDUtil.toBuf;
 
-public class TestTracingServer extends TracingServiceImplBase {
+public class ExampleTracingServer extends TracingServiceImplBase {
     private Server server;
 
-    public TestTracingServer(int port) {
+    public ExampleTracingServer(int port) {
         server = ServerBuilder.forPort(port).addService(this).build();
     }
 
@@ -61,7 +61,7 @@ public class TestTracingServer extends TracingServiceImplBase {
 
     public static void main(String[] args) {
         try {
-            TestTracingServer server = new TestTracingServer(Integer.parseInt(args[0]));
+            ExampleTracingServer server = new ExampleTracingServer(Integer.parseInt(args[0]));
             server.start();
         } catch (Exception ex) {
             ex.printStackTrace();
