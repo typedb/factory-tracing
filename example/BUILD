@@ -3,7 +3,6 @@ java_binary(
     srcs = ["ExampleTracingServer.java"],
     deps = [
         "//protocol",
-        "//util",
         "//dependencies/maven/artifacts/com/google/protobuf:protobuf-java",
         "//dependencies/maven/artifacts/io/grpc:grpc-core",
         "//dependencies/maven/artifacts/io/grpc:grpc-protobuf",
@@ -35,7 +34,6 @@ java_binary(
     main_class = "grabl.tracing.test.TestTracingClient",
     runtime_deps = [
         "//protocol",
-        "//util",
         "//dependencies/maven/artifacts/io/grpc:grpc-netty",
         "//dependencies/maven/artifacts/io/netty:netty-codec-http2",
         "//dependencies/maven/artifacts/io/netty:netty-handler",

@@ -62,7 +62,8 @@ jobs:
       - run: |
           export DEPLOY_MAVEN_USERNAME=$REPO_GRAKN_USERNAME
           export DEPLOY_MAVEN_PASSWORD=$REPO_GRAKN_PASSWORD
-          bazel run --define version=$(git rev-parse HEAD) //:deploy-maven -- snapshot
+          bazel run --define version=$(git rev-parse HEAD) //client:deploy-maven -- snapshot
+          bazel run --define version=$(git rev-parse HEAD) //protocol:deploy-maven -- snapshot
 
   test-deployment-maven:
     machine: true
@@ -84,7 +85,7 @@ jobs:
           export SYNC_DEPENDENCIES_TOKEN=$REPO_GITHUB_TOKEN
           bazel run @graknlabs_build_tools//ci:sync-dependencies -- \
           --source grabl-tracing@$CIRCLE_SHA1 \
-          --targets client-java:master simulation:master grakn:master
+          --targets client-java:master simulation:master grakn:master grabl:development
   release-approval:
     machine: true
     steps:
@@ -110,7 +111,8 @@ jobs:
       - run: |
           export DEPLOY_MAVEN_USERNAME=$REPO_GRAKN_USERNAME
           export DEPLOY_MAVEN_PASSWORD=$REPO_GRAKN_PASSWORD
-          bazel run --define version=$(git rev-parse HEAD) //:deploy-maven -- release
+          bazel run --define version=$(git rev-parse HEAD) //client:deploy-maven -- release
+          bazel run --define version=$(git rev-parse HEAD) //protocol:deploy-maven -- release
   sync-dependencies-release:
     machine: true
     working_directory: ~/grabl-tracing
@@ -121,7 +123,7 @@ jobs:
           export SYNC_DEPENDENCIES_TOKEN=$REPO_GITHUB_TOKEN
           bazel run @graknlabs_build_tools//ci:sync-dependencies -- \
           --source grabl-tracing@$(git rev-parse HEAD) \
-          --targets client-java:master simulation:master grakn:master
+          --targets client-java:master simulation:master grakn:master grabl:development
   release-cleanup:
     machine: true
     steps:
