@@ -171,16 +171,10 @@ workflows:
           filters:
             branches:
               only: grabl-tracing-release-branch
-      - deploy-github:
-          filters:
-            branches:
-              only: grabl-tracing-release-branch
-          requires:
-            - release-validate
       - deploy-approval:
           type: approval
           requires:
-            - deploy-github
+            - release-validate
       - deploy-maven-release:
           filters:
             branches:
