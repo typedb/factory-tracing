@@ -12,14 +12,14 @@ import java.util.concurrent.TimeUnit;
 import static grabl.tracing.util.ProtobufUUIDUtil.fromBuf;
 import static java.util.Objects.requireNonNull;
 
-class GrablTracingStandard implements GrablTracing {
+public class GrablTracingStandard implements GrablTracing {
     private final ManagedChannel channel;
     private final TracingServiceBlockingStub tracingServiceBlockingStub;
     private final TracingServiceStub tracingServiceStub;
 
     private final TraceStream stream;
 
-    GrablTracingStandard(ManagedChannel channel) {
+    public GrablTracingStandard(ManagedChannel channel) {
         this.channel = channel;
         tracingServiceBlockingStub = TracingServiceGrpc.newBlockingStub(channel);
         tracingServiceStub = TracingServiceGrpc.newStub(channel);

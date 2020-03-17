@@ -1,4 +1,4 @@
-package grabl.tracing.test;
+package grabl.tracing.example;
 
 import grabl.tracing.client.GrablTracing;
 import grabl.tracing.client.GrablTracing.Analysis;
@@ -7,7 +7,7 @@ import grabl.tracing.client.GrablTracing.Trace;
 import static grabl.tracing.client.GrablTracing.tracing;
 import static grabl.tracing.client.GrablTracing.withLogging;
 
-public class TestTracingClient {
+public class ExampleTracingClient {
 
     public static void main(String[] args) {
         int iterations = 10;
