@@ -44,25 +44,6 @@ jobs:
           command: bazel build //...
       - run: bazel run @graknlabs_build_tools//unused_deps -- list
 
-#  build-checkstyle:
-#    machine: true
-#    working_directory: ~/grabl-tracing
-#    steps:
-#      - install-bazel-linux-rbe
-#      - checkout
-#      - run: bazel run @graknlabs_build_tools//checkstyle:test-coverage
-#      - run-bazel-rbe:
-#          command: bazel test $(bazel query 'kind(checkstyle_test, //...)')
-
-#  test-concept:
-#    machine: true
-#    working_directory: ~/grabl-tracing
-#    steps:
-#      - install-bazel-linux-rbe
-#      - checkout
-#      - run-bazel-rbe:
-#          command: bazel test //test/integration/concept:concept-it --test_output=errors
-
   deploy-maven-snapshot:
     machine: true
     working_directory: ~/grabl-tracing
@@ -159,14 +140,6 @@ workflows:
           filters:
             branches:
               ignore: grabl-tracing-release-branch
-#      - build-checkstyle:
-#          filters:
-#            branches:
-#              ignore: grabl-tracing-release-branch
-#      - test-concept:
-#          filters:
-#            branches:
-#              ignore: grabl-tracing-release-branch
       - deploy-maven-snapshot:
           filters:
             branches:
@@ -174,7 +147,6 @@ workflows:
           requires:
             - build
             - build-checkstyle
-#            - test-concept
       - test-deployment-maven:
           filters:
             branches:
