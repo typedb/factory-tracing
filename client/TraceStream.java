@@ -2,16 +2,13 @@ package grabl.tracing.client;
 
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import grabl.tracing.protocol.TracingProto.Trace;
 import grabl.tracing.protocol.TracingServiceGrpc.TracingServiceStub;
 import io.grpc.stub.StreamObserver;
 
-import static grabl.tracing.util.ProtobufUUIDUtil.toBuf;
+import static grabl.tracing.protocol.util.ProtobufUUIDUtil.toBuf;
 
 /**
  * The GRPC client layer for the tracing session.

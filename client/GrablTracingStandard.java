@@ -9,7 +9,7 @@ import io.grpc.*;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static grabl.tracing.util.ProtobufUUIDUtil.fromBuf;
+import static grabl.tracing.protocol.util.ProtobufUUIDUtil.fromBuf;
 import static java.util.Objects.requireNonNull;
 
 public class GrablTracingStandard implements GrablTracing {

@@ -9,7 +9,7 @@ import io.grpc.stub.StreamObserver;
 
 import java.util.UUID;
 
-import static grabl.tracing.util.ProtobufUUIDUtil.toBuf;
+import static grabl.tracing.protocol.util.ProtobufUUIDUtil.toBuf;
 
 public class ExampleTracingServer extends TracingServiceImplBase {
     private Server server;

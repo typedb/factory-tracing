@@ -1,4 +1,4 @@
-package grabl.tracing.util;
+package grabl.tracing.protocol.util;
 
 import com.google.protobuf.ByteString;
 
