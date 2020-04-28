@@ -1,5 +1,3 @@
-Documentation: http://dev.grakn.ai/docs/client-api/java
-
 ### Distribution
 
 Available through https://repo.grakn.ai

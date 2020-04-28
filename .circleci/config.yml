@@ -120,8 +120,8 @@ jobs:
       - run: |
           export DEPLOY_MAVEN_USERNAME=$REPO_GRAKN_USERNAME
           export DEPLOY_MAVEN_PASSWORD=$REPO_GRAKN_PASSWORD
-          bazel run --define version=$(git rev-parse HEAD) //client:deploy-maven -- release
-          bazel run --define version=$(git rev-parse HEAD) //protocol:deploy-maven -- release
+          bazel run --define version=$(cat VERSION) //protocol:deploy-maven -- release
+          bazel run --define version=$(cat VERSION) //client:deploy-maven -- release
 
   sync-dependencies-release:
     machine: true
