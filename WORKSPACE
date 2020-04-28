@@ -90,6 +90,9 @@ java_grpc_compile()
 # Load distribution dependencies #
 ##################################
 
+load("@graknlabs_bazel_distribution//github:dependencies.bzl", "tcnksm_ghr")
+tcnksm_ghr()
+
 load("@graknlabs_bazel_distribution//common:dependencies.bzl", "bazelbuild_rules_pkg")
 bazelbuild_rules_pkg()
 
