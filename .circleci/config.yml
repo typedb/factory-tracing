@@ -86,6 +86,7 @@ jobs:
           bazel run @graknlabs_build_tools//ci:sync-dependencies -- \
           --source grabl-tracing@$(git rev-parse HEAD) \
           --targets client-java:master simulation:master grakn:master grabl:development
+
   release-approval:
     machine: true
     steps:
@@ -95,6 +96,7 @@ jobs:
           export RELEASE_APPROVAL_USERNAME=$REPO_GITHUB_USERNAME
           export RELEASE_APPROVAL_TOKEN=$REPO_GITHUB_TOKEN
           bazel run @graknlabs_build_tools//ci:release-approval
+
   deploy-maven-release:
     machine: true
     working_directory: ~/grabl-tracing
@@ -106,6 +108,7 @@ jobs:
           export DEPLOY_MAVEN_PASSWORD=$REPO_GRAKN_PASSWORD
           bazel run --define version=$(git rev-parse HEAD) //client:deploy-maven -- release
           bazel run --define version=$(git rev-parse HEAD) //protocol:deploy-maven -- release
+
   sync-dependencies-release:
     machine: true
     working_directory: ~/grabl-tracing
@@ -117,12 +120,12 @@ jobs:
           bazel run @graknlabs_build_tools//ci:sync-dependencies -- \
           --source grabl-tracing@$(git rev-parse HEAD) \
           --targets client-java:master simulation:master grakn:master grabl:development
+
   release-cleanup:
     machine: true
     steps:
       - checkout
       - run: git push --delete https://$REPO_GITHUB_TOKEN@github.com/graknlabs/grabl-tracing $CIRCLE_BRANCH
-
 
 workflows:
   grabl-tracing:
@@ -160,6 +163,7 @@ workflows:
               only: master
           requires:
             - sync-dependencies-snapshot
+
   grabl-tracing-release:
     jobs:
       - deploy-approval:
