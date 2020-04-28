@@ -87,6 +87,20 @@ jobs:
           --source grabl-tracing@$(git rev-parse HEAD) \
           --targets client-java:master simulation:master grakn:master grabl:development
 
+  deploy-github:
+    machine: true
+    working_directory: ~/grabl-tracing
+    steps:
+      - install-bazel-linux-rbe
+      - checkout
+      - run: |
+          pip install certifi
+          export RELEASE_NOTES_TOKEN=$REPO_GITHUB_TOKEN
+          bazel run @graknlabs_build_tools//ci:release-notes -- client-java $(cat VERSION) ./RELEASE_TEMPLATE.md
+      - run: |
+          export DEPLOY_GITHUB_TOKEN=$REPO_GITHUB_TOKEN
+          bazel run --define version=$(cat VERSION) //:deploy-github -- $CIRCLE_SHA1
+
   release-approval:
     machine: true
     steps:
@@ -166,11 +180,18 @@ workflows:
 
   grabl-tracing-release:
     jobs:
+      - deploy-github:
+          type: approval
+          filters:
+            branches:
+              only: grabl-tracing-release-branch
       - deploy-approval:
           type: approval
           filters:
             branches:
               only: grabl-tracing-release-branch
+          requires:
+            - deploy-github
       - deploy-maven-release:
           filters:
             branches:
