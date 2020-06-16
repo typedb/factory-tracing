@@ -108,7 +108,6 @@ java_library(
         ":netty-buffer",
         ":netty-codec",
         ":netty-common",
-        ":netty-resolver",
         ":netty-transport"
     ],
     visibility = [
