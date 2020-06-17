@@ -1,4 +1,4 @@
-jars = [
+artifacts = [
     "com.google.protobuf:protobuf-java",
     "io.grpc:grpc-api",
     "io.grpc:grpc-core",

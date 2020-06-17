@@ -65,12 +65,16 @@ load("@graknlabs_build_tools_ci_pip//:requirements.bzl",
 graknlabs_build_tools_ci_pip_install = "pip_install")
 graknlabs_build_tools_ci_pip_install()
 
-########################################
-# Load rules_jvm_external dependencies #
-########################################
+#################################################################
+# Load Java dependencies and rules from @graknlabs_dependencies #
+#################################################################
 
-load("@graknlabs_dependencies//:rules_jvm_external.bzl", "rules_jvm_external")
-rules_jvm_external()
+load("@graknlabs_dependencies//:rules.bzl", "rules")
+rules()
+
+load("@graknlabs_dependencies//maven:rules.bzl", "maven")
+load("//dependencies/maven:artifacts.bzl", "artifacts")
+maven(artifacts)
 
 #####################################
 # Load Java dependencies from Maven #
@@ -78,17 +82,6 @@ rules_jvm_external()
 
 load("//dependencies/maven:dependencies.bzl", "maven_dependencies")
 maven_dependencies()
-
-load("@graknlabs_dependencies//maven:rules.bzl", "maven")
-load("//:dependencies/maven.bzl", "jars")
-maven(jars)
-
-#####################################
-# Load rules dependencies for Bazel #
-#####################################
-
-load("@graknlabs_dependencies//:rules.bzl", "rules")
-rules()
 
 #######################################
 # Load compiler dependencies for GRPC #
