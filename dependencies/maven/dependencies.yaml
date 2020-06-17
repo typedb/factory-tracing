@@ -22,42 +22,6 @@ dependencies:
       version: "23.0"
       lang: java
 
-  com.google.protobuf:
-    protobuf-java:
-      version: "3.5.1"
-      lang: java
-
-  io.grpc:
-    grpc-core:
-      version: "1.24.1"
-      lang: java
-    grpc-netty:
-      version: "1.24.1"
-      lang: java
-    grpc-protobuf:
-      version: "1.24.1"
-      lang: java
-    grpc-stub:
-      version: "1.24.1"
-      lang: java
-    grpc-testing:
-      version: "1.24.1"
-      lang: java
-    grpc-api:
-      version: "1.24.1"
-      lang: java
-
-  io.netty:
-    netty-codec-http2:
-      version: "4.1.38.Final"
-      lang: java
-    netty-handler:
-      version: "4.1.38.Final"
-      lang: java
-    netty-tcnative-boringssl-static:
-      version: "2.0.25.Final"
-      lang: java
-
   org.slf4j:
     slf4j-api:
       version: "1.7.28"
