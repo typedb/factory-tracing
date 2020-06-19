@@ -21,13 +21,18 @@ version: 2.1
 commands:
   bazel-install:
     steps:
-      - run: bash ./tools/bazelinstall/linux.sh
-      - run: bash ./tools/bazelinstall/rbe.sh
-  
-  bazel-run:
+      - run: |
+          mkdir install
+          cd install
+          curl -OL https://raw.githubusercontent.com/lolski/build-tools/refactor/tools/bazelinstall/linux.sh
+          bash ./linux.sh && rm ./linux.sh
+          curl -OL https://raw.githubusercontent.com/lolski/build-tools/refactor/tools/bazelinstall/rbe.sh
+          bash ./rbe.sh && rm ./rbe.sh
+
+  bazel-run-rbe:
     parameters:
       command:
-          type: string
+        type: string
     steps:
       - run: bazel run @graknlabs_dependencies//tools/bazelrun:rbe -- << parameters.command >>
 
