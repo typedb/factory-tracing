@@ -19,19 +19,17 @@
 
 version: 2.1
 commands:
-  install-bazel-linux-rbe:
+  bazel-install:
     steps:
-      - run: curl -OL https://raw.githubusercontent.com/graknlabs/build-tools/master/ci/install-bazel-linux.sh
-      - run: bash ./install-bazel-linux.sh && rm ./install-bazel-linux.sh
-      - run: curl -OL https://raw.githubusercontent.com/graknlabs/build-tools/master/ci/install-bazel-rbe.sh
-      - run: bash ./install-bazel-rbe.sh && rm ./install-bazel-rbe.sh
-
-  run-bazel-rbe:
+      - run: bash ./tools/bazelinstall/linux.sh
+      - run: bash ./tools/bazelinstall/rbe.sh
+  
+  bazel-run:
     parameters:
       command:
-        type: string
+          type: string
     steps:
-      - run: bazel run @graknlabs_dependencies//ci:run-bazel-rbe -- << parameters.command >>
+      - run: bazel run @graknlabs_dependencies//tools/bazelrun:rbe -- << parameters.command >>
 
 jobs:
   build:
@@ -40,9 +38,9 @@ jobs:
     steps:
       - install-bazel-linux-rbe
       - checkout
-      - run-bazel-rbe:
+      - bazel-run:
           command: bazel build //...
-      - run: bazel run @graknlabs_dependencies//unused_deps -- list
+      - run: bazel run @graknlabs_dependencies//unuseddeps:unused-deps -- list
 
   test-client:
     machine: true
@@ -50,7 +48,7 @@ jobs:
     steps:
       - install-bazel-linux-rbe
       - checkout
-      - run-bazel-rbe:
+      - bazel-run:
           command: bazel test //client/test --test_output=errors
 
   deploy-maven-snapshot:
