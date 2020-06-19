@@ -23,21 +23,21 @@ workspace(name = "grabl_tracing")
 # Load Grakn Labs dependencies #
 ################################
 
-load("//dependencies/graknlabs:dependencies.bzl", "graknlabs_build_tools")
-graknlabs_build_tools()
+load("//dependencies/graknlabs:dependencies.bzl", "graknlabs_dependencies")
+graknlabs_dependencies()
 
-load("@graknlabs_build_tools//distribution:dependencies.bzl", "graknlabs_bazel_distribution")
-graknlabs_bazel_distribution()
+load("@graknlabs_dependencies//distribution:deps.bzl", distribution_deps = "deps")
+distribution_deps()
 
-load("@graknlabs_build_tools//unused_deps:dependencies.bzl", "unused_deps_dependencies")
-unused_deps_dependencies()
+load("@graknlabs_dependencies//tools/unuseddeps:deps.bzl", unuseddeps_deps = "deps")
+unuseddeps_deps()
 
 
 ###########################
 # Load Bazel Dependencies #
 ###########################
 
-load("@graknlabs_build_tools//bazel:dependencies.bzl", "bazel_common", "bazel_deps", "bazel_toolchain")
+load("@graknlabs_dependencies//builder/bazel:deps.bzl", "bazel_common", "bazel_deps", "bazel_toolchain")
 bazel_common()
 bazel_deps()
 bazel_toolchain()
@@ -47,20 +47,20 @@ bazel_toolchain()
 # Load Build Tools dependencies #
 #################################
 
-load("@graknlabs_build_tools//bazel:dependencies.bzl", "bazel_rules_python")
-bazel_rules_python()
+load("@graknlabs_dependencies//builder/python:deps.bzl", python_deps = "deps")
+python_deps()
 
-load("@io_bazel_rules_python//python:pip.bzl", "pip_repositories", "pip_import")
+load("@rules_python//python:pip.bzl", "pip_repositories", "pip3_import")
 pip_repositories()
 
-pip_import(
-    name = "graknlabs_build_tools_ci_pip",
-    requirements = "@graknlabs_build_tools//ci:requirements.txt",
+pip3_import(
+    name = "graknlabs_dependencies_ci_pip",
+    requirements = "@graknlabs_dependencies//tools:requirements.txt",
 )
 
-load("@graknlabs_build_tools_ci_pip//:requirements.bzl",
-graknlabs_build_tools_ci_pip_install = "pip_install")
-graknlabs_build_tools_ci_pip_install()
+load("@graknlabs_dependencies_ci_pip//:requirements.bzl",
+graknlabs_dependencies_ci_pip_install = "pip_install")
+graknlabs_dependencies_ci_pip_install()
 
 
 ###########################
@@ -75,8 +75,8 @@ maven_dependencies()
 # Load compiler dependencies for GRPC #
 #######################################
 
-load("@graknlabs_build_tools//grpc:dependencies.bzl", "grpc_dependencies")
-grpc_dependencies()
+load("@graknlabs_dependencies//builder/grpc:deps.bzl", grpc_deps = "deps")
+grpc_deps()
 
 load("@com_github_grpc_grpc//bazel:grpc_deps.bzl",
 com_github_grpc_grpc_deps = "grpc_deps")
