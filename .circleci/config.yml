@@ -43,7 +43,7 @@ jobs:
     steps:
       - bazel-install
       - checkout
-      - bazel-run:
+      - bazel-run-rbe:
           command: bazel build //...
       - run: bazel run @graknlabs_dependencies//unuseddeps:unused-deps -- list
 
@@ -53,7 +53,7 @@ jobs:
     steps:
       - bazel-install
       - checkout
-      - bazel-run:
+      - bazel-run-rbe:
           command: bazel test //client/test --test_output=errors
 
   deploy-maven-snapshot:
