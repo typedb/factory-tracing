@@ -36,7 +36,7 @@ jobs:
     machine: true
     working_directory: ~/grabl-tracing
     steps:
-      - install-bazel-linux-rbe
+      - bazel-install
       - checkout
       - bazel-run:
           command: bazel build //...
@@ -46,7 +46,7 @@ jobs:
     machine: true
     working_directory: ~/grabl-tracing
     steps:
-      - install-bazel-linux-rbe
+      - bazel-install
       - checkout
       - bazel-run:
           command: bazel test //client/test --test_output=errors
@@ -56,7 +56,7 @@ jobs:
     working_directory: ~/grabl-tracing
     steps:
       - checkout
-      - install-bazel-linux-rbe
+      - bazel-install
       - run: |
           export DEPLOY_MAVEN_USERNAME=$REPO_GRAKN_USERNAME
           export DEPLOY_MAVEN_PASSWORD=$REPO_GRAKN_PASSWORD
@@ -68,7 +68,7 @@ jobs:
     working_directory: ~/grabl-tracing
     steps:
       - checkout
-      - install-bazel-linux-rbe
+      - bazel-install
       - run: sed -i -e "s/GRABL_TRACING_VERSION_MARKER/$(git rev-parse HEAD)/g" test/deployment/pom.xml
       - run: cat test/deployment/pom.xml
       - run: cd test/deployment && mvn test
@@ -77,7 +77,7 @@ jobs:
     machine: true
     working_directory: ~/grabl-tracing
     steps:
-      - install-bazel-linux-rbe
+      - bazel-install
       - checkout
       - run: |
           export SYNC_DEPENDENCIES_TOKEN=$REPO_GITHUB_TOKEN
@@ -89,7 +89,7 @@ jobs:
     machine: true
     working_directory: ~/grabl-tracing
     steps:
-      - install-bazel-linux-rbe
+      - bazel-install
       - checkout
       - run: |
           pip install certifi
@@ -102,7 +102,7 @@ jobs:
   release-approval:
     machine: true
     steps:
-      - install-bazel-linux-rbe
+      - bazel-install
       - checkout
       - run: |
           export RELEASE_APPROVAL_USERNAME=$REPO_GITHUB_USERNAME
@@ -113,7 +113,7 @@ jobs:
     machine: true
     working_directory: ~/grabl-tracing
     steps:
-      - install-bazel-linux-rbe
+      - bazel-install
       - checkout
       - run: |
           export DEPLOY_MAVEN_USERNAME=$REPO_GRAKN_USERNAME
@@ -125,7 +125,7 @@ jobs:
     machine: true
     working_directory: ~/grabl-tracing
     steps:
-      - install-bazel-linux-rbe
+      - bazel-install
       - checkout
       - run: |
           export SYNC_DEPENDENCIES_TOKEN=$REPO_GITHUB_TOKEN
