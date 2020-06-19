@@ -25,9 +25,11 @@ commands:
           mkdir install
           cd install
           curl -OL https://raw.githubusercontent.com/lolski/build-tools/refactor/tools/bazelinstall/linux.sh
-          bash ./linux.sh && rm ./linux.sh
+          bash ./linux.sh
           curl -OL https://raw.githubusercontent.com/lolski/build-tools/refactor/tools/bazelinstall/rbe.sh
-          bash ./rbe.sh && rm ./rbe.sh
+          bash ./rbe.sh
+          cd ..
+          rm -rf install
 
   bazel-run-rbe:
     parameters:
@@ -60,8 +62,8 @@ jobs:
     machine: true
     working_directory: ~/grabl-tracing
     steps:
-      - checkout
       - bazel-install
+      - checkout
       - run: |
           export DEPLOY_MAVEN_USERNAME=$REPO_GRAKN_USERNAME
           export DEPLOY_MAVEN_PASSWORD=$REPO_GRAKN_PASSWORD
@@ -72,8 +74,8 @@ jobs:
     machine: true
     working_directory: ~/grabl-tracing
     steps:
-      - checkout
       - bazel-install
+      - checkout
       - run: sed -i -e "s/GRABL_TRACING_VERSION_MARKER/$(git rev-parse HEAD)/g" test/deployment/pom.xml
       - run: cat test/deployment/pom.xml
       - run: cd test/deployment && mvn test
