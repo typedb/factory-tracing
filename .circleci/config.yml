@@ -48,7 +48,7 @@ jobs:
       - checkout
       - bazel-run-rbe:
           command: bazel build //...
-      - run: bazel run @graknlabs_dependencies//unuseddeps:unused-deps -- list
+      - run: bazel run @graknlabs_dependencies//tools/unuseddeps:unused-deps -- list
 
   test-client:
     machine: 
@@ -93,7 +93,7 @@ jobs:
       - checkout
       - run: |
           export SYNC_DEPENDENCIES_TOKEN=$REPO_GITHUB_TOKEN
-          bazel run @graknlabs_dependencies//ci:sync-dependencies -- \
+          bazel run @graknlabs_dependencies//tools/sync:dependencies -- \
           --source grabl-tracing@$(git rev-parse HEAD) \
           --targets client-java:master simulation:master grakn:master grabl:development
 
@@ -107,7 +107,7 @@ jobs:
       - run: |
           pip install certifi
           export RELEASE_NOTES_TOKEN=$REPO_GITHUB_TOKEN
-          bazel run @graknlabs_dependencies//ci:release-notes -- grabl-tracing $(cat VERSION) ./RELEASE_TEMPLATE.md
+          bazel run @graknlabs_dependencies//tools/release:create-notes -- grabl-tracing $(cat VERSION) ./RELEASE_TEMPLATE.md
       - run: |
           export DEPLOY_GITHUB_TOKEN=$REPO_GITHUB_TOKEN
           bazel run --define version=$(cat VERSION) //:deploy-github -- $CIRCLE_SHA1
@@ -121,7 +121,7 @@ jobs:
       - run: |
           export RELEASE_APPROVAL_USERNAME=$REPO_GITHUB_USERNAME
           export RELEASE_APPROVAL_TOKEN=$REPO_GITHUB_TOKEN
-          bazel run @graknlabs_dependencies//ci:release-approval
+          bazel run @graknlabs_dependencies//tools/release:approval
 
   deploy-maven-release:
     machine: 
@@ -145,7 +145,7 @@ jobs:
       - checkout
       - run: |
           export SYNC_DEPENDENCIES_TOKEN=$REPO_GITHUB_TOKEN
-          bazel run @graknlabs_dependencies//ci:sync-dependencies -- \
+          bazel run @graknlabs_dependencies//tools/sync:dependencies -- \
           --source grabl-tracing@$(git rev-parse HEAD) \
           --targets client-java:master simulation:master grakn:master grabl:development
 
