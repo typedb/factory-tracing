@@ -41,11 +41,11 @@ java_library(
     ],
     deps = [
         "//dependencies/maven/artifacts/com/google/guava",
-        "//dependencies/maven/artifacts/com/google/protobuf:protobuf-java",
-        "//dependencies/maven/artifacts/io/grpc:grpc-core",
-        "//dependencies/maven/artifacts/io/grpc:grpc-protobuf",
-        "//dependencies/maven/artifacts/io/grpc:grpc-stub",
-        "//dependencies/maven/artifacts/io/grpc:grpc-api",
+        "@maven//:com_google_protobuf_protobuf_java",
+        "@maven//:io_grpc_grpc_core",
+        "@maven//:io_grpc_grpc_protobuf",
+        "@maven//:io_grpc_grpc_stub",
+        "@maven//:io_grpc_grpc_api",
     ],
     tags = ["maven_coordinates=io.grabl.tracing:grabl-tracing-protocol:{pom_version}"],
 )
