@@ -40,7 +40,8 @@ commands:
 
 jobs:
   build:
-    machine: true
+    machine: 
+      image: ubuntu-1604:201903-01
     working_directory: ~/grabl-tracing
     steps:
       - bazel-install
@@ -50,7 +51,8 @@ jobs:
       - run: bazel run @graknlabs_dependencies//unuseddeps:unused-deps -- list
 
   test-client:
-    machine: true
+    machine: 
+      image: ubuntu-1604:201903-01
     working_directory: ~/grabl-tracing
     steps:
       - bazel-install
@@ -59,7 +61,8 @@ jobs:
           command: bazel test //client/test --test_output=errors
 
   deploy-maven-snapshot:
-    machine: true
+    machine: 
+      image: ubuntu-1604:201903-01
     working_directory: ~/grabl-tracing
     steps:
       - bazel-install
@@ -71,7 +74,8 @@ jobs:
           bazel run --define version=$(git rev-parse HEAD) //protocol:deploy-maven -- snapshot
 
   test-deployment-maven:
-    machine: true
+    machine: 
+      image: ubuntu-1604:201903-01
     working_directory: ~/grabl-tracing
     steps:
       - bazel-install
@@ -81,7 +85,8 @@ jobs:
       - run: cd test/deployment && mvn test
 
   sync-dependencies-snapshot:
-    machine: true
+    machine: 
+      image: ubuntu-1604:201903-01
     working_directory: ~/grabl-tracing
     steps:
       - bazel-install
@@ -93,7 +98,8 @@ jobs:
           --targets client-java:master simulation:master grakn:master grabl:development
 
   deploy-github:
-    machine: true
+    machine: 
+      image: ubuntu-1604:201903-01
     working_directory: ~/grabl-tracing
     steps:
       - bazel-install
@@ -107,7 +113,8 @@ jobs:
           bazel run --define version=$(cat VERSION) //:deploy-github -- $CIRCLE_SHA1
 
   release-approval:
-    machine: true
+    machine: 
+      image: ubuntu-1604:201903-01
     steps:
       - bazel-install
       - checkout
@@ -117,7 +124,8 @@ jobs:
           bazel run @graknlabs_dependencies//ci:release-approval
 
   deploy-maven-release:
-    machine: true
+    machine: 
+      image: ubuntu-1604:201903-01
     working_directory: ~/grabl-tracing
     steps:
       - bazel-install
@@ -129,7 +137,8 @@ jobs:
           bazel run --define version=$(cat VERSION) //client:deploy-maven -- release
 
   sync-dependencies-release:
-    machine: true
+    machine: 
+      image: ubuntu-1604:201903-01
     working_directory: ~/grabl-tracing
     steps:
       - bazel-install
@@ -141,7 +150,8 @@ jobs:
           --targets client-java:master simulation:master grakn:master grabl:development
 
   release-cleanup:
-    machine: true
+    machine: 
+      image: ubuntu-1604:201903-01
     steps:
       - checkout
       - run: git push --delete https://$REPO_GITHUB_TOKEN@github.com/graknlabs/grabl-tracing $CIRCLE_BRANCH
