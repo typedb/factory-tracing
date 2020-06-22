@@ -5,9 +5,9 @@ java_test(
     deps = [
         "//client",
         "//protocol",
-        "//dependencies/maven/artifacts/junit",
-        "//dependencies/maven/artifacts/org/mockito:mockito-core",
-        "//dependencies/maven/artifacts/org/hamcrest",
+        "@maven//:junit_junit",
+        "@maven//:org_mockito_mockito_core",
+        "@maven//:org_hamcrest_hamcrest",
         "@maven//:io_grpc_grpc_testing",
         "@maven//:io_grpc_grpc_api",
         "@maven//:io_grpc_grpc_core",

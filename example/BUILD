@@ -29,7 +29,7 @@ java_binary(
         "@maven//:io_grpc_grpc_protobuf",
         "@maven//:io_grpc_grpc_stub",
         "@maven//:io_grpc_grpc_api",
-        "//dependencies/maven/artifacts/org/slf4j:slf4j-api",
+        "@maven//:org_slf4j_slf4j_api",
     ],
     main_class = "grabl.tracing.test.TestTracingClient",
     runtime_deps = [
@@ -38,6 +38,6 @@ java_binary(
         "@maven//:io_netty_netty_codec_http2",
         "@maven//:io_netty_netty_handler",
         "@maven//:io_netty_netty_tcnative_boringssl_static",
-        "//dependencies/maven/artifacts/ch/qos/logback:logback-classic",
+        "@maven//:ch_qos_logback_logback_classic",
     ],
 )

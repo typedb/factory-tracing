@@ -31,7 +31,7 @@ java_library(
         "@maven//:io_grpc_grpc_protobuf",
         "@maven//:io_grpc_grpc_stub",
         "@maven//:io_grpc_grpc_api",
-        "//dependencies/maven/artifacts/org/slf4j:slf4j-api",
+        "@maven//:org_slf4j_slf4j_api",
     ],
     runtime_deps = [
         "@maven//:io_grpc_grpc_netty",

@@ -40,7 +40,7 @@ java_library(
         "util/ProtobufUUIDUtil.java",
     ],
     deps = [
-        "//dependencies/maven/artifacts/com/google/guava",
+        "@maven//:com_google_guava_guava",
         "@maven//:com_google_protobuf_protobuf_java",
         "@maven//:io_grpc_grpc_core",
         "@maven//:io_grpc_grpc_protobuf",
