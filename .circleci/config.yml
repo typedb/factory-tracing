@@ -19,46 +19,49 @@
 
 version: 2.1
 commands:
-  install-bazel-linux-rbe:
+  install-bazel:
     steps:
-      - run: curl -OL https://raw.githubusercontent.com/graknlabs/build-tools/master/ci/install-bazel-linux.sh
-      - run: bash ./install-bazel-linux.sh && rm ./install-bazel-linux.sh
-      - run: curl -OL https://raw.githubusercontent.com/graknlabs/build-tools/master/ci/install-bazel-rbe.sh
-      - run: bash ./install-bazel-rbe.sh && rm ./install-bazel-rbe.sh
+      - run: curl -OL https://raw.githubusercontent.com/graknlabs/dependencies/master/tool/bazelinstall/linux.sh
+      - run: bash ./linux.sh && rm ./linux.sh
+      - run: curl -OL https://raw.githubusercontent.com/graknlabs/dependencies/master/tool/bazelinstall/rbe.sh
+      - run: bash ./rbe.sh && rm ./rbe.sh          
 
-  run-bazel-rbe:
+  run-bazel:
     parameters:
       command:
         type: string
     steps:
-      - run: bazel run @graknlabs_build_tools//ci:run-bazel-rbe -- << parameters.command >>
+      - run: bazel run @graknlabs_dependencies//tool/bazelrun:rbe -- << parameters.command >>
 
 jobs:
   build:
-    machine: true
+    machine: 
+      image: ubuntu-1604:201903-01
     working_directory: ~/grabl-tracing
     steps:
-      - install-bazel-linux-rbe
+      - install-bazel
       - checkout
-      - run-bazel-rbe:
+      - run-bazel:
           command: bazel build //...
-      - run: bazel run @graknlabs_build_tools//unused_deps -- list
+      - run: bazel run @graknlabs_dependencies//tool/unuseddeps:unused-deps -- list
 
   test-client:
-    machine: true
+    machine: 
+      image: ubuntu-1604:201903-01
     working_directory: ~/grabl-tracing
     steps:
-      - install-bazel-linux-rbe
+      - install-bazel
       - checkout
-      - run-bazel-rbe:
+      - run-bazel:
           command: bazel test //client/test --test_output=errors
 
   deploy-maven-snapshot:
-    machine: true
+    machine: 
+      image: ubuntu-1604:201903-01
     working_directory: ~/grabl-tracing
     steps:
+      - install-bazel
       - checkout
-      - install-bazel-linux-rbe
       - run: |
           export DEPLOY_MAVEN_USERNAME=$REPO_GRAKN_USERNAME
           export DEPLOY_MAVEN_PASSWORD=$REPO_GRAKN_PASSWORD
@@ -66,56 +69,61 @@ jobs:
           bazel run --define version=$(git rev-parse HEAD) //protocol:deploy-maven -- snapshot
 
   test-deployment-maven:
-    machine: true
+    machine: 
+      image: ubuntu-1604:201903-01
     working_directory: ~/grabl-tracing
     steps:
+      - install-bazel
       - checkout
-      - install-bazel-linux-rbe
       - run: sed -i -e "s/GRABL_TRACING_VERSION_MARKER/$(git rev-parse HEAD)/g" test/deployment/pom.xml
       - run: cat test/deployment/pom.xml
       - run: cd test/deployment && mvn test
 
   sync-dependencies-snapshot:
-    machine: true
+    machine: 
+      image: ubuntu-1604:201903-01
     working_directory: ~/grabl-tracing
     steps:
-      - install-bazel-linux-rbe
+      - install-bazel
       - checkout
       - run: |
           export SYNC_DEPENDENCIES_TOKEN=$REPO_GITHUB_TOKEN
-          bazel run @graknlabs_build_tools//ci:sync-dependencies -- \
+          bazel run @graknlabs_dependencies//tool/sync:dependencies -- \
           --source grabl-tracing@$(git rev-parse HEAD) \
           --targets client-java:master simulation:master grakn:master grabl:development
 
   deploy-github:
-    machine: true
+    machine: 
+      image: ubuntu-1604:201903-01
     working_directory: ~/grabl-tracing
     steps:
-      - install-bazel-linux-rbe
+      - install-bazel
       - checkout
       - run: |
           pip install certifi
           export RELEASE_NOTES_TOKEN=$REPO_GITHUB_TOKEN
-          bazel run @graknlabs_build_tools//ci:release-notes -- grabl-tracing $(cat VERSION) ./RELEASE_TEMPLATE.md
+          bazel run @graknlabs_dependencies//tool/release:create-notes -- grabl-tracing $(cat VERSION) ./RELEASE_TEMPLATE.md
       - run: |
           export DEPLOY_GITHUB_TOKEN=$REPO_GITHUB_TOKEN
           bazel run --define version=$(cat VERSION) //:deploy-github -- $CIRCLE_SHA1
 
   release-approval:
-    machine: true
+    machine: 
+      image: ubuntu-1604:201903-01
     steps:
-      - install-bazel-linux-rbe
+      - install-bazel
       - checkout
       - run: |
           export RELEASE_APPROVAL_USERNAME=$REPO_GITHUB_USERNAME
           export RELEASE_APPROVAL_TOKEN=$REPO_GITHUB_TOKEN
-          bazel run @graknlabs_build_tools//ci:release-approval
+          bazel run @graknlabs_dependencies//tool/release:approval
 
   deploy-maven-release:
-    machine: true
+    machine: 
+      image: ubuntu-1604:201903-01
     working_directory: ~/grabl-tracing
     steps:
-      - install-bazel-linux-rbe
+      - install-bazel
       - checkout
       - run: |
           export DEPLOY_MAVEN_USERNAME=$REPO_GRAKN_USERNAME
@@ -124,19 +132,21 @@ jobs:
           bazel run --define version=$(cat VERSION) //client:deploy-maven -- release
 
   sync-dependencies-release:
-    machine: true
+    machine: 
+      image: ubuntu-1604:201903-01
     working_directory: ~/grabl-tracing
     steps:
-      - install-bazel-linux-rbe
+      - install-bazel
       - checkout
       - run: |
           export SYNC_DEPENDENCIES_TOKEN=$REPO_GITHUB_TOKEN
-          bazel run @graknlabs_build_tools//ci:sync-dependencies -- \
+          bazel run @graknlabs_dependencies//tool/sync:dependencies -- \
           --source grabl-tracing@$(git rev-parse HEAD) \
           --targets client-java:master simulation:master grakn:master grabl:development
 
   release-cleanup:
-    machine: true
+    machine: 
+      image: ubuntu-1604:201903-01
     steps:
       - checkout
       - run: git push --delete https://$REPO_GITHUB_TOKEN@github.com/graknlabs/grabl-tracing $CIRCLE_BRANCH

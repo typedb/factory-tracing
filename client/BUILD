@@ -19,25 +19,25 @@
 
 package(default_visibility = ["//visibility:public"])
 
-load("@graknlabs_build_tools//distribution/maven:rules.bzl", "deploy_maven", "assemble_maven")
+load("@graknlabs_dependencies//distribution/maven:rules.bzl", "deploy_maven", "assemble_maven")
 
 java_library(
     name = "client",
     srcs = glob(["*.java"]),
     deps = [
         "//protocol:protocol",
-        "//dependencies/maven/artifacts/com/google/protobuf:protobuf-java",
-        "//dependencies/maven/artifacts/io/grpc:grpc-core",
-        "//dependencies/maven/artifacts/io/grpc:grpc-protobuf",
-        "//dependencies/maven/artifacts/io/grpc:grpc-stub",
-        "//dependencies/maven/artifacts/io/grpc:grpc-api",
-        "//dependencies/maven/artifacts/org/slf4j:slf4j-api",
+        "@maven//:com_google_protobuf_protobuf_java",
+        "@maven//:io_grpc_grpc_core",
+        "@maven//:io_grpc_grpc_protobuf",
+        "@maven//:io_grpc_grpc_stub",
+        "@maven//:io_grpc_grpc_api",
+        "@maven//:org_slf4j_slf4j_api",
     ],
     runtime_deps = [
-        "//dependencies/maven/artifacts/io/grpc:grpc-netty",
-        "//dependencies/maven/artifacts/io/netty:netty-codec-http2",
-        "//dependencies/maven/artifacts/io/netty:netty-handler",
-        "//dependencies/maven/artifacts/io/netty:netty-tcnative-boringssl-static",
+        "@maven//:io_grpc_grpc_netty",
+        "@maven//:io_netty_netty_codec_http2",
+        "@maven//:io_netty_netty_handler",
+        "@maven//:io_netty_netty_tcnative_boringssl_static",
     ],
     tags = ["maven_coordinates=io.grabl.tracing:grabl-tracing-client:{pom_version}"],
 )
