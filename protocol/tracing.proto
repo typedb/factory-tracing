@@ -17,7 +17,7 @@ message Analysis {
         string commit = 3;
     }
     message Res {
-        bytes analysisId = 1;
+        int64 analysisId = 1;
     }
 }
 
