@@ -41,7 +41,7 @@ message Trace {
         repeated string labels = 10;
 
         message StartRoot {
-            bytes analysisId = 1;
+            int64 analysisId = 1;
 
             string tracker = 2;
             uint32 iteration = 3;

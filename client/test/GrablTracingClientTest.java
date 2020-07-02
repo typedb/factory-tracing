@@ -33,7 +33,7 @@ public class GrablTracingClientTest {
                         @Override
                         public void create(TracingProto.Analysis.Req request, StreamObserver<TracingProto.Analysis.Res> responseObserver) {
                             responseObserver.onNext(TracingProto.Analysis.Res.newBuilder()
-                                    .setAnalysisId(ByteString.copyFromUtf8("analysis"))
+                                    .setAnalysisId(Long.MAX_VALUE)
                                     .build());
                             responseObserver.onCompleted();
                         }

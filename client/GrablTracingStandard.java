@@ -52,7 +52,7 @@ public class GrablTracingStandard implements GrablTracing {
 
     private class AnalysisImpl implements Analysis {
 
-        private final UUID analysisId;
+        private final long analysisId;
 
         private AnalysisImpl(String owner, String repo, String commit) {
             TracingProto.Analysis.Req req = TracingProto.Analysis.Req.newBuilder()
@@ -61,7 +61,7 @@ public class GrablTracingStandard implements GrablTracing {
                     .setCommit(commit)
                     .build();
             TracingProto.Analysis.Res res = tracingServiceBlockingStub.create(req);
-            analysisId = fromBuf(res.getAnalysisId());
+            analysisId = res.getAnalysisId();
         }
 
         public Trace trace(String name, String tracker, int iteration) {
@@ -75,7 +75,7 @@ public class GrablTracingStandard implements GrablTracing {
         private final UUID id;
         private final UUID rootId;
 
-        private TraceImpl(UUID analysisId, String name, String tracker, int iteration) {
+        private TraceImpl(long analysisId, String name, String tracker, int iteration) {
             id = UUID.randomUUID();
             rootId = id;
             stream.traceRootStart(id, analysisId, name, tracker, iteration, System.currentTimeMillis());

@@ -27,8 +27,9 @@ public class ExampleTracingServer extends TracingServiceImplBase {
     public void create(Analysis.Req request, StreamObserver<Analysis.Res> responseObserver) {
         System.out.println("Create Request: " + request);
         UUID id = UUID.randomUUID();
+        long idLong = UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE;
         Analysis.Res response = Analysis.Res.newBuilder()
-                .setAnalysisId(toBuf(id))
+                .setAnalysisId(idLong)
                 .build();
         System.out.println("Create Response: " + response);
         responseObserver.onNext(response);

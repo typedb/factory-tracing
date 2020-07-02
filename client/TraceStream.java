@@ -31,14 +31,14 @@ class TraceStream {
         requestObserver = serviceStub.stream(new TracingResponseObserver());
     }
 
-    void traceRootStart(UUID traceId, UUID analysisId, String name, String tracker, int iteration, long startMillis) {
+    void traceRootStart(UUID traceId, Long analysisId, String name, String tracker, int iteration, long startMillis) {
         assert traceId != null;
         assert analysisId != null;
         ensureConnection();
         Trace.Req req = Trace.Req.newBuilder()
                 .setId(toBuf(traceId))
                 .setRootStart(Trace.Req.StartRoot.newBuilder()
-                        .setAnalysisId(toBuf(analysisId))
+                        .setAnalysisId(analysisId)
                         .setTracker(tracker)
                         .setIteration(iteration))
                 .setName(name)
