@@ -99,7 +99,7 @@ public class GrablTracingThreadStatic {
 
         ThreadContext context = contextStack.peek();
         if (context == null) {
-            throw new IllegalStateException("No context found: must be in a ThreadContext");
+            return THREAD_TRACE_NO_OP;
         }
 
         return new ThreadTraceImpl(singletonAnalysis.trace(name, context.getTracker(), context.getIteration()));
