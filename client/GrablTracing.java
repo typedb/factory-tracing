@@ -3,6 +3,7 @@ package grabl.tracing.client;
 import io.grpc.ManagedChannelBuilder;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Grabl Tracing client.
@@ -116,6 +117,8 @@ public interface GrablTracing extends AutoCloseable {
     static GrablTracing tracing(String grablUri, String username, String apiToken) {
         return new GrablTracingStandard(
                 ManagedChannelBuilder.forTarget(grablUri)
+                        .keepAliveTime(1, TimeUnit.MINUTES)
+                        .keepAliveWithoutCalls(true)
                         .useTransportSecurity()
                         .intercept(new GrablTokenAuthClientInterceptor(username, apiToken))
                         .build()
@@ -132,6 +135,8 @@ public interface GrablTracing extends AutoCloseable {
     static GrablTracing tracing(String grablUri) {
         return new GrablTracingStandard(
                 ManagedChannelBuilder.forTarget(grablUri)
+                        .keepAliveTime(1, TimeUnit.MINUTES)
+                        .keepAliveWithoutCalls(true)
                         .usePlaintext()
                         .build()
         );
