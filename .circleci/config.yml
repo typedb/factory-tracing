@@ -184,7 +184,8 @@ workflows:
           filters:
             branches:
               only: master
-
+          requires:
+            - test-deployment-maven
   grabl-tracing-release:
     jobs:
       - deploy-github:
@@ -208,3 +209,5 @@ workflows:
           filters:
             branches:
               only: grabl-tracing-release-branch
+          requires:
+            - deploy-maven-release
