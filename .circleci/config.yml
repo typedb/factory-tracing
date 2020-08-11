@@ -180,18 +180,10 @@ workflows:
               only: master
           requires:
             - deploy-maven-snapshot
-      - sync-dependencies-snapshot:
-          filters:
-            branches:
-              only: master
-          requires:
-            - test-deployment-maven
       - release-approval:
           filters:
             branches:
               only: master
-          requires:
-            - sync-dependencies-snapshot
 
   grabl-tracing-release:
     jobs:
@@ -212,15 +204,7 @@ workflows:
               only: grabl-tracing-release-branch
           requires:
             - deploy-approval
-      - sync-dependencies-release:
-          filters:
-            branches:
-              only: grabl-tracing-release-branch
-          requires:
-            - deploy-maven-release
       - release-cleanup:
           filters:
             branches:
               only: grabl-tracing-release-branch
-          requires:
-            - sync-dependencies-release
