@@ -19,7 +19,8 @@
 
 package(default_visibility = ["//visibility:public"])
 load("@stackb_rules_proto//java:java_grpc_compile.bzl", "java_grpc_compile")
-load("@graknlabs_dependencies//distribution/maven:rules.bzl", "assemble_maven", "deploy_maven")
+load("@graknlabs_bazel_distribution//maven:rules.bzl", "assemble_maven", "deploy_maven")
+load("@graknlabs_dependencies//library/maven:artifacts.bzl", "maven_overrides", maven_overrides_org = "artifacts")
 
 proto_library(
     name = "tracing-proto",
@@ -55,6 +56,7 @@ assemble_maven(
     target = "//protocol",
     package = "",
     workspace_refs = "@graknlabs_grabl_tracing_workspace_refs//:refs.json",
+    version_overrides = maven_overrides(maven_overrides_org),
     project_name = "Grabl Tracing Protocol",
     project_description = "Grabl Tracing Protocol",
     project_url = "https://github.com/graknlabs/grabl-tracing",
@@ -64,4 +66,5 @@ assemble_maven(
 deploy_maven(
     name = "deploy-maven",
     target = ":assemble-maven",
+    deployment_properties = "@graknlabs_dependencies//distribution:deployment.properties",
 )

@@ -19,7 +19,8 @@
 
 package(default_visibility = ["//visibility:public"])
 
-load("@graknlabs_dependencies//distribution/maven:rules.bzl", "deploy_maven", "assemble_maven")
+load("@graknlabs_bazel_distribution//maven:rules.bzl", "assemble_maven", "deploy_maven")
+load("@graknlabs_dependencies//library/maven:artifacts.bzl", "maven_overrides", maven_overrides_org = "artifacts")
 
 java_library(
     name = "client",
@@ -47,6 +48,7 @@ assemble_maven(
     target = "//client",
     package = "",
     workspace_refs = "@graknlabs_grabl_tracing_workspace_refs//:refs.json",
+    version_overrides = maven_overrides(maven_overrides_org),
     project_name = "Grabl Tracing Client",
     project_description = "Grabl Tracing API and Client",
     project_url = "https://github.com/graknlabs/grabl-tracing",
@@ -56,4 +58,5 @@ assemble_maven(
 deploy_maven(
     name = "deploy-maven",
     target = ":assemble-maven",
+    deployment_properties = "@graknlabs_dependencies//distribution:deployment.properties",
 )
