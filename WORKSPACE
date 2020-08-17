@@ -142,8 +142,10 @@ rules_pkg_dependencies()
 # Load @maven #
 ###############
 load("@graknlabs_dependencies//library/maven:rules.bzl", "maven")
-load("//dependencies/maven:artifacts.bzl", "artifacts")
-maven(artifacts)
+load("//dependencies/maven:artifacts.bzl",
+    maven_artifacts = "artifacts",
+    maven_overrides = "overrides")
+maven(maven_artifacts, maven_overrides)
 
 ##################################################
 # Create @graknlabs_grabl_tracing_workspace_refs #
