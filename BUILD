@@ -21,13 +21,15 @@ package(default_visibility = ["//visibility:public"])
 exports_files(["VERSION"], visibility = ["//visibility:public"])
 
 load("@graknlabs_bazel_distribution//github:rules.bzl", "deploy_github")
+load("//:deployment.bzl", "deployment")
 
-exports_files(["VERSION", "RELEASE_TEMPLATE.md", "deployment.properties"])
+exports_files(["VERSION", "RELEASE_TEMPLATE.md"])
 
 deploy_github(
     name = "deploy-github",
     release_description = "//:RELEASE_TEMPLATE.md",
     title = "Grabl Tracing API and Client",
     title_append_version = True,
-    deployment_properties = "//:deployment.properties",
+    organisation = deployment["github.organisation"],
+    repository = deployment["github.repository"]
 )
