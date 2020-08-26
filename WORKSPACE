@@ -94,7 +94,7 @@ load("@graknlabs_bazel_distribution//github:deps.bzl", github_deps = "deps")
 github_deps()
 
 ################################
-# Load @graknlabs dependencies #
+# Load @maven dependencies #
 ################################
 
 load("@graknlabs_dependencies//library/maven:rules.bzl", "maven")
