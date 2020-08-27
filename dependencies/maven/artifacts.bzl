@@ -18,7 +18,7 @@ artifacts = [
 ]
 
 # Override libraries conflicting with versions defined in @graknlabs_dependencies
-overrides = {
+artifacts_repo = {
     "io.netty:netty-all": "4.1.38.Final",
     "io.netty:netty-codec-http2": "4.1.38.Final",
     "io.netty:netty-handler": "4.1.38.Final",

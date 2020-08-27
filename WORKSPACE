@@ -98,10 +98,8 @@ github_deps()
 ################################
 
 load("@graknlabs_dependencies//library/maven:rules.bzl", "maven")
-load("//dependencies/maven:artifacts.bzl",
-    maven_artifacts = "artifacts",
-    maven_overrides = "overrides")
-maven(maven_artifacts, maven_overrides)
+load("//dependencies/maven:artifacts.bzl", "artifacts", "artifacts_repo")
+maven(artifacts, artifacts_repo)
 
 ##################################################
 # Create @graknlabs_grabl_tracing_workspace_refs #
