@@ -1,3 +1,6 @@
+
+load("@graknlabs_dependencies//tool/checkstyle:rules.bzl", "checkstyle_test")
+
 java_binary(
     name = "server",
     srcs = ["ExampleTracingServer.java"],
@@ -40,4 +43,11 @@ java_binary(
         "@maven//:io_netty_netty_tcnative_boringssl_static",
         "@maven//:ch_qos_logback_logback_classic",
     ],
+)
+
+checkstyle_test(
+    name = "checkstyle",
+    include = glob(["*"]),
+    license_type = "agpl",
+    size = "small",
 )

@@ -19,6 +19,7 @@
 
 package(default_visibility = ["//visibility:public"])
 load("@stackb_rules_proto//java:java_grpc_compile.bzl", "java_grpc_compile")
+load("@graknlabs_dependencies//tool/checkstyle:rules.bzl", "checkstyle_test")
 load("@graknlabs_dependencies//distribution:deployment.bzl", "deployment")
 load("@graknlabs_dependencies//distribution/maven:version.bzl", "version")
 load("@graknlabs_dependencies//library/maven:artifacts.bzl", artifacts_org = "artifacts")
@@ -52,6 +53,16 @@ java_library(
         "@maven//:io_grpc_grpc_api",
     ],
     tags = ["maven_coordinates=io.grabl:grabl-tracing-protocol:{pom_version}"],
+)
+
+checkstyle_test(
+    name = "checkstyle",
+    include = glob([
+        "*",
+        "util/*",
+    ]),
+    license_type = "agpl",
+    size = "small",
 )
 
 assemble_maven(

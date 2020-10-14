@@ -1,3 +1,6 @@
+
+load("@graknlabs_dependencies//tool/checkstyle:rules.bzl", "checkstyle_test")
+
 java_test(
     name = "test",
     srcs = ["GrablTracingClientTest.java"],
@@ -20,4 +23,11 @@ java_test(
         "@maven//:io_netty_netty_handler",
         "@maven//:io_netty_netty_tcnative_boringssl_static",
     ],
+)
+
+checkstyle_test(
+    name = "checkstyle",
+    include = glob(["*"]),
+    license_type = "agpl",
+    size = "small",
 )

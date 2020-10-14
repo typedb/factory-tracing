@@ -20,10 +20,23 @@
 package(default_visibility = ["//visibility:public"])
 exports_files(["VERSION"], visibility = ["//visibility:public"])
 
+load("@graknlabs_dependencies//tool/checkstyle:rules.bzl", "checkstyle_test")
 load("@graknlabs_bazel_distribution//github:rules.bzl", "deploy_github")
 load("//:deployment.bzl", "deployment")
 
 exports_files(["VERSION", "RELEASE_TEMPLATE.md"])
+
+checkstyle_test(
+    name = "checkstyle",
+    include = glob([
+        "*",
+        ".grabl/automation.yml",
+        "test/deployment/pom.xml",
+        "test/deployment/src/test/**/*",
+    ]),
+    license_type = "agpl",
+    size = "small",
+)
 
 deploy_github(
     name = "deploy-github",
