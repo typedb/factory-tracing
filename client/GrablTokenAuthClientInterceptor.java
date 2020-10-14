@@ -17,7 +17,13 @@
 
 package grabl.tracing.client;
 
-import io.grpc.*;
+import io.grpc.CallOptions;
+import io.grpc.Channel;
+import io.grpc.ClientCall;
+import io.grpc.ClientInterceptor;
+import io.grpc.ForwardingClientCall;
+import io.grpc.Metadata;
+import io.grpc.MethodDescriptor;
 
 /**
  * A GRPC {@link ClientInterceptor} that adds the username and api-token to the metadata for every rpc so that the

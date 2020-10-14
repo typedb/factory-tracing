@@ -21,7 +21,7 @@ import grabl.tracing.protocol.TracingProto;
 import grabl.tracing.protocol.TracingServiceGrpc;
 import grabl.tracing.protocol.TracingServiceGrpc.TracingServiceBlockingStub;
 import grabl.tracing.protocol.TracingServiceGrpc.TracingServiceStub;
-import io.grpc.*;
+import io.grpc.ManagedChannel;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
