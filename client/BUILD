@@ -44,7 +44,7 @@ java_library(
         "@maven//:io_netty_netty_handler",
         "@maven//:io_netty_netty_tcnative_boringssl_static",
     ],
-    tags = ["maven_coordinates=io.grabl.tracing:grabl-tracing-client:{pom_version}"],
+    tags = ["maven_coordinates=io.grabl:grabl-tracing-client:{pom_version}"],
 )
 
 assemble_maven(

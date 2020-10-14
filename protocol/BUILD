@@ -51,7 +51,7 @@ java_library(
         "@maven//:io_grpc_grpc_stub",
         "@maven//:io_grpc_grpc_api",
     ],
-    tags = ["maven_coordinates=io.grabl.tracing:grabl-tracing-protocol:{pom_version}"],
+    tags = ["maven_coordinates=io.grabl:grabl-tracing-protocol:{pom_version}"],
 )
 
 assemble_maven(

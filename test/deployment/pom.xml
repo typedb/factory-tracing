@@ -42,7 +42,7 @@
     </repositories>
     <dependencies>
         <dependency>
-            <groupId>io.grabl.tracing</groupId>
+            <groupId>io.grabl</groupId>
             <artifactId>grabl-tracing-client</artifactId>
             <version>GRABL_TRACING_VERSION_MARKER</version>
         </dependency>
