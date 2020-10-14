@@ -10,7 +10,7 @@ Available through https://repo.grakn.ai
 </repositories>
 <dependencies>
     <dependency>
-        <groupid>io.grabl.tracing</groupid>
+        <groupid>io.grabl</groupid>
         <artifactid>grabl-tracing-client</artifactid>
         <version>{version}</version>
     </dependency>
