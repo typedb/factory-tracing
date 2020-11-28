@@ -17,6 +17,9 @@
 # under the License.
 #
 
+config:
+  version-candidate: VERSION
+
 build:
   correctness:
     build:
