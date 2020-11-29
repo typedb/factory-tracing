@@ -44,7 +44,8 @@ deploy_github(
     title = "Grabl Tracing API and Client",
     title_append_version = True,
     organisation = deployment["github.organisation"],
-    repository = deployment["github.repository"]
+    repository = deployment["github.repository"],
+    draft = False
 )
 
 # CI targets that are not declared in any BUILD file, but are called externally
