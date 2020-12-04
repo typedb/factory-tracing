@@ -26,7 +26,7 @@ build:
   quality:
     filter:
       owner: graknlabs
-      branch: master
+      branch: dependency-analysis
     dependency-analysis:
       machine: graknlabs-ubuntu-20.04-java11
       script: |
