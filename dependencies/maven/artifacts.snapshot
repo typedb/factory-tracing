@@ -2,6 +2,8 @@
 @maven//:ch_qos_logback_logback_classic_1_2_3
 @maven//:ch_qos_logback_logback_core
 @maven//:ch_qos_logback_logback_core_1_2_3
+@maven//:com_eclipsesource_minimal_json_minimal_json
+@maven//:com_eclipsesource_minimal_json_minimal_json_0_9_5
 @maven//:com_google_android_annotations
 @maven//:com_google_android_annotations_4_1_1_4
 @maven//:com_google_api_grpc_proto_google_common_protos
@@ -18,6 +20,8 @@
 @maven//:com_google_j2objc_j2objc_annotations_1_1
 @maven//:com_google_protobuf_protobuf_java
 @maven//:com_google_protobuf_protobuf_java_3_5_1
+@maven//:commons_io_commons_io
+@maven//:commons_io_commons_io_1_4
 @maven//:io_grpc_grpc_api
 @maven//:io_grpc_grpc_api_1_33_1
 @maven//:io_grpc_grpc_context
@@ -80,3 +84,5 @@
 @maven//:org_objenesis_objenesis_2_5
 @maven//:org_slf4j_slf4j_api
 @maven//:org_slf4j_slf4j_api_1_7_28
+@maven//:org_zeroturnaround_zt_exec
+@maven//:org_zeroturnaround_zt_exec_1_10
