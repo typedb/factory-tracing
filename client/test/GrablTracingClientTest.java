@@ -80,7 +80,7 @@ public class GrablTracingClientTest {
 
     @Test
     public void analysis() {
-        GrablTracing.Analysis analysis = client.analysis("owner", "repo", "commit");
+        GrablTracing.Analysis analysis = client.analysis("owner", "repo", "commit", "analysis");
 
         ArgumentCaptor<TracingProto.Analysis.Req> requestCaptor = ArgumentCaptor.forClass(TracingProto.Analysis.Req.class);
 
@@ -91,5 +91,6 @@ public class GrablTracingClientTest {
         assertThat(req.getOwner(), equalTo("owner"));
         assertThat(req.getRepo(), equalTo("repo"));
         assertThat(req.getCommit(), equalTo("commit"));
+        assertThat(req.getName(), equalTo("analysis"));
     }
 }
