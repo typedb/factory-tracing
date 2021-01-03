@@ -35,9 +35,9 @@ build:
     build:
       image: graknlabs-ubuntu-20.04
       script: |
-        bazel build --config=rbe //...
+        bazel build //...
         bazel run @graknlabs_dependencies//tool/checkstyle:test-coverage
-        bazel test --config=rbe $(bazel query 'kind(checkstyle_test, //...)')
+        bazel test $(bazel query 'kind(checkstyle_test, //...)')
     build-dependency:
       image: graknlabs-ubuntu-20.04
       script: |
@@ -47,7 +47,7 @@ build:
     test-client:
       image: graknlabs-ubuntu-20.04
       script: |
-        bazel test --config=rbe //client/test --test_output=errors
+        bazel test //client/test --test_output=errors
     deploy-maven-snapshot:
       filter:
         owner: graknlabs
