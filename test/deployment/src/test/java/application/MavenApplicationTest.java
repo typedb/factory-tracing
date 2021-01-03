@@ -27,7 +27,7 @@ public class MavenApplicationTest {
     @Test
     public void testImport() {
         GrablTracing tracing = GrablTracing.tracingNoOp();
-        GrablTracing.Analysis analysis = tracing.analysis("owner", "repo", "commit");
+        GrablTracing.Analysis analysis = tracing.analysis("owner", "repo", "commit", "analysis-name");
         analysis.trace("trace", "tracker", 1).trace("sub").end();
 
         TracingProto.Trace.Req.newBuilder().setName("name").build();
