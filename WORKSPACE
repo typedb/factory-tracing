@@ -90,13 +90,16 @@ rules_pkg_dependencies()
 load("@graknlabs_bazel_distribution//github:deps.bzl", github_deps = "deps")
 github_deps()
 
+# Load //maven
+load("@graknlabs_bazel_distribution//maven:deps.bzl", graknlabs_bazel_distribution_maven_artifacts = "maven_artifacts")
+
 ################################
 # Load @maven dependencies #
 ################################
 
 load("@graknlabs_dependencies//library/maven:rules.bzl", "maven")
 load("//dependencies/maven:artifacts.bzl", "artifacts", "artifacts_repo")
-maven(artifacts + graknlabs_dependencies_tool_maven_artifacts, artifacts_repo)
+maven(artifacts + graknlabs_dependencies_tool_maven_artifacts + graknlabs_bazel_distribution_maven_artifacts, artifacts_repo)
 
 ##################################################
 # Create @graknlabs_grabl_tracing_workspace_refs #
