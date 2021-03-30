@@ -46,7 +46,7 @@ under the License.
         <dependency>
             <groupId>io.grabl</groupId>
             <artifactId>grabl-tracing-client</artifactId>
-            <version>6a1f6f04ee053879ddae39e66e478519dd720f14</version>
+            <version>GRABL_TRACING_VERSION_MARKER</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
