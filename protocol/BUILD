@@ -69,7 +69,7 @@ checkstyle_test(
 assemble_maven(
     name = "assemble-maven",
     target = "//protocol",
-    source_jar_prefix = "grabl/tracing/",
+    source_jar_prefix = "",
     workspace_refs = "@graknlabs_grabl_tracing_workspace_refs//:refs.json",
     version_overrides = version(artifacts_org, artifacts_repo),
     project_name = "Grabl Tracing Protocol",
