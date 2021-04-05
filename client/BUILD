@@ -31,6 +31,7 @@ java_library(
     srcs = glob(["*.java"]),
     deps = [
         "//protocol:protocol",
+        "@maven//:com_google_code_findbugs_jsr305",
         "@maven//:com_google_protobuf_protobuf_java",
         "@maven//:io_grpc_grpc_core",
         "@maven//:io_grpc_grpc_protobuf",

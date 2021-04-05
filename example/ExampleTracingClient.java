@@ -23,8 +23,7 @@ import grabl.tracing.client.GrablTracing;
 import grabl.tracing.client.GrablTracing.Analysis;
 import grabl.tracing.client.GrablTracing.Trace;
 
-import static grabl.tracing.client.GrablTracing.tracing;
-import static grabl.tracing.client.GrablTracing.withLogging;
+import static grabl.tracing.client.GrablTracing.create;
 
 public class ExampleTracingClient {
 
@@ -34,7 +33,7 @@ public class ExampleTracingClient {
             iterations = Integer.parseInt(args[1]);
         }
 
-        try (GrablTracing tracing = withLogging(tracing(args[0]))) {
+        try (GrablTracing tracing = create(args[0]).withLogging()) {
 
             Analysis analysis = tracing.analysis("testowner", "testrepo", "testcommit", "testanalysis");
 

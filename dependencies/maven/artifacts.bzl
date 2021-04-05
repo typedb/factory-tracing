@@ -19,6 +19,7 @@
 
 artifacts = [
     "ch.qos.logback:logback-classic",
+    "com.google.code.findbugs:jsr305",
     "com.google.guava:guava",
     "com.google.protobuf:protobuf-java",
     "io.grpc:grpc-api",

@@ -58,6 +58,11 @@ public class GrablTracingSlf4j implements GrablTracing {
     }
 
     @Override
+    public GrablTracing withLogging() {
+        return this;
+    }
+
+    @Override
     public void close() throws Exception {
         LOG.trace("close");
         innerTracing.close();

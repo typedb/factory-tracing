@@ -21,6 +21,7 @@ package grabl.tracing.client;
 
 import io.grpc.ManagedChannelBuilder;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -32,24 +33,76 @@ public interface GrablTracing extends AutoCloseable {
     /**
      * Create a new performance analysis in Grabl to add new traces to.
      *
-     * @param owner The repository organisation/owner.
-     * @param repo The repository.
+     * @param owner  The repository organisation/owner.
+     * @param repo   The repository.
      * @param commit The commit in this repository.
      * @return An instance of the Analysis to send traces on.
      */
     Analysis analysis(String owner, String repo, String commit, String name);
 
     /**
-    * Begin a continuation trace from a given root and parent ID. This trace links to a trace tree from an analysis
-    * that may have been created from another application. This starts the trace immediately with a timestamp generated
-    * from {@link System#currentTimeMillis()}.
-    *
-    * @param rootId The trace tree rootId.
-    * @param parentId The trace parentId.
-    * @param name The trace name.
-    * @return An instance of the Trace to send further data on.
-    */
+     * Begin a continuation trace from a given root and parent ID. This trace links to a trace tree from an analysis
+     * that may have been created from another application. This starts the trace immediately with a timestamp generated
+     * from {@link System#currentTimeMillis()}.
+     *
+     * @param rootId   The trace tree rootId.
+     * @param parentId The trace parentId.
+     * @param name     The trace name.
+     * @return An instance of the Trace to send further data on.
+     */
     Trace trace(UUID rootId, UUID parentId, String name);
+
+    /**
+     * Decorate a GrablTracing with Slf4j logging (if the logging is enabled to the TRACE level).
+     *
+     * @return If logging is enabled, a wrapped instance that logs to Slf4j, otherwise the instance {@param inner}.
+     */
+    default GrablTracing withLogging() {
+        return GrablTracingSlf4j.wrapIfLoggingEnabled(this);
+    }
+
+    /**
+     * Get a GrablTracing that can be used to safely run tracing-enabled applications with no connection and minimal
+     * associated overhead.
+     *
+     * @return an instance that does nothing but adheres to the {@link GrablTracing} contract sufficiently to work with
+     * any code that does tracing.
+     */
+    static GrablTracing createNoOp() {
+        return GrablTracingNoOp.getInstance();
+    }
+
+    /**
+     * A plaintext variation of Grabl tracing, useful for testing the tracing protocol but should not be used in real
+     * applications.
+     *
+     * @param uri The URI of your test tracing server.
+     * @return An instance that has connected to your server without any authentication.
+     */
+    static GrablTracing create(String uri) {
+        return create(uri, null);
+    }
+
+    /**
+     * Connect to the Grabl tracing server with TLS and providing
+     *
+     * @param uri      The URI of your Grabl server.
+     * @param username Your username on the Grabl server.
+     * @param token    Your API token for the username.
+     * @return An instance that has securely connected to your Grabl server.
+     */
+    static GrablTracing create(String uri, String username, String token) {
+        return create(uri, new GrablTokenAuthClientInterceptor(username, token));
+    }
+
+    private static GrablTracing create(String uri, @Nullable GrablTokenAuthClientInterceptor authClientInterceptor) {
+        ManagedChannelBuilder<?> channelBuilder = ManagedChannelBuilder.forTarget(uri)
+                .keepAliveTime(1, TimeUnit.MINUTES)
+                .keepAliveWithoutCalls(true)
+                .useTransportSecurity();
+        if (authClientInterceptor != null) channelBuilder.intercept(authClientInterceptor);
+        return new GrablTracingStandard(channelBuilder.build());
+    }
 
     /**
      * Represents a performance analysis that can receive further tracing data.
@@ -59,8 +112,8 @@ public interface GrablTracing extends AutoCloseable {
          * Begin a new trace tree on this performance analysis. This starts the trace immediately with a timestamp
          * generated from {@link System#currentTimeMillis()}.
          *
-         * @param name The trace name.
-         * @param tracker The tracker to link this trace tree to.
+         * @param name      The trace name.
+         * @param tracker   The tracker to link this trace tree to.
          * @param iteration The iteration of this trace.
          * @return An instance for the root trace to send further data and traces on.
          */
@@ -123,62 +176,5 @@ public interface GrablTracing extends AutoCloseable {
          * @return The ID for this trace.
          */
         UUID getId();
-    }
-
-    /**
-     * Connect to the Grabl tracing server with TLS and providing
-     *
-     * @param grablUri The URI of your Grabl server.
-     * @param username Your username on the Grabl server.
-     * @param apiToken Your API token for the username.
-     * @return An instance that has securely connected to your Grabl server.
-     */
-    static GrablTracing tracing(String grablUri, String username, String apiToken) {
-        return new GrablTracingStandard(
-                ManagedChannelBuilder.forTarget(grablUri)
-                        .keepAliveTime(1, TimeUnit.MINUTES)
-                        .keepAliveWithoutCalls(true)
-                        .useTransportSecurity()
-                        .intercept(new GrablTokenAuthClientInterceptor(username, apiToken))
-                        .build()
-        );
-    }
-
-    /**
-     * A plaintext variation of Grabl tracing, useful for testing the tracing protocol but should not be used in real
-     * applications.
-     *
-     * @param grablUri The URI of your test tracing server.
-     * @return An instance that has connected to your server without any authentication.
-     */
-    static GrablTracing tracing(String grablUri) {
-        return new GrablTracingStandard(
-                ManagedChannelBuilder.forTarget(grablUri)
-                        .keepAliveTime(1, TimeUnit.MINUTES)
-                        .keepAliveWithoutCalls(true)
-                        .usePlaintext()
-                        .build()
-        );
-    }
-
-    /**
-     * Get a GrablTracing that can be used to safely run tracing-enabled applications with no connection and minimal
-     * associated overhead.
-     *
-     * @return an instance that does nothing but adheres to the {@link GrablTracing} contract sufficiently to work with
-     *      any code that does tracing.
-     */
-    static GrablTracing tracingNoOp() {
-        return GrablTracingNoOp.getInstance();
-    }
-
-    /**
-     * Decorate a GrablTracing with Slf4j logging (if the logging is enabled to the TRACE level).
-     *
-     * @param inner The actual GrablTracing that underlies this implementation.
-     * @return If logging is enabled, a wrapped instance that logs to Slf4j, otherwise the instance {@param inner}.
-     */
-    static GrablTracing withLogging(GrablTracing inner) {
-        return GrablTracingSlf4j.wrapIfLoggingEnabled(inner);
     }
 }
