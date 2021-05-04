@@ -17,13 +17,13 @@
  * under the License.
  */
 
-package grabl.tracing.example;
+package com.vaticle.factory.example;
 
-import grabl.tracing.client.GrablTracing;
-import grabl.tracing.client.GrablTracing.Analysis;
-import grabl.tracing.client.GrablTracing.Trace;
+import com.vaticle.factory.client.FactoryTracing;
+import com.vaticle.factory.client.FactoryTracing.Analysis;
+import com.vaticle.factory.client.FactoryTracing.Trace;
 
-import static grabl.tracing.client.GrablTracing.create;
+import static com.vaticle.factory.client.FactoryTracing.create;
 
 public class ExampleTracingClient {
 
@@ -33,7 +33,7 @@ public class ExampleTracingClient {
             iterations = Integer.parseInt(args[1]);
         }
 
-        try (GrablTracing tracing = create(args[0]).withLogging()) {
+        try (FactoryTracing tracing = create(args[0]).withLogging()) {
 
             Analysis analysis = tracing.analysis("testowner", "testrepo", "testcommit", "testanalysis");
 

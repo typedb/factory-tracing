@@ -17,13 +17,12 @@
  * under the License.
  */
 
-package grabl.tracing.client.test;
+package com.vaticle.factory.client.test;
 
-import com.google.protobuf.ByteString;
-import grabl.tracing.client.GrablTracing;
-import grabl.tracing.client.GrablTracingStandard;
-import grabl.tracing.protocol.TracingProto;
-import grabl.tracing.protocol.TracingServiceGrpc;
+import com.vaticle.factory.client.FactoryTracing;
+import com.vaticle.factory.client.FactoryTracingStandard;
+import com.vaticle.factory.protocol.TracingProto;
+import com.vaticle.factory.protocol.TracingServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.inprocess.InProcessServerBuilder;
@@ -41,7 +40,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class GrablTracingClientTest {
+public class FactoryTracingClientTest {
 
     @Rule
     public final GrpcCleanupRule grpcCleanup = new GrpcCleanupRule();
@@ -52,14 +51,14 @@ public class GrablTracingClientTest {
                         @Override
                         public void create(TracingProto.Analysis.Req request, StreamObserver<TracingProto.Analysis.Res> responseObserver) {
                             responseObserver.onNext(TracingProto.Analysis.Res.newBuilder()
-                                    .setAnalysisId(Long.MAX_VALUE)
-                                    .build());
+                                                            .setAnalysisId(Long.MAX_VALUE)
+                                                            .build());
                             responseObserver.onCompleted();
                         }
                     }
             ));
 
-    private GrablTracing client;
+    private FactoryTracing client;
 
     @Before
     public void setUp() throws Exception {
@@ -68,19 +67,19 @@ public class GrablTracingClientTest {
 
         // Create a server, add service, start, and register for automatic graceful shutdown.
         grpcCleanup.register(InProcessServerBuilder
-                .forName(serverName).directExecutor().addService(serviceImpl).build().start());
+                                     .forName(serverName).directExecutor().addService(serviceImpl).build().start());
 
         // Create a client channel and register for automatic graceful shutdown.
         ManagedChannel channel = grpcCleanup.register(
                 InProcessChannelBuilder.forName(serverName).directExecutor().build());
 
         // Create a HelloWorldClient using the in-process channel;
-        client = new GrablTracingStandard(channel);
+        client = new FactoryTracingStandard(channel);
     }
 
     @Test
     public void analysis() {
-        GrablTracing.Analysis analysis = client.analysis("owner", "repo", "commit", "analysis");
+        FactoryTracing.Analysis analysis = client.analysis("owner", "repo", "commit", "analysis");
 
         ArgumentCaptor<TracingProto.Analysis.Req> requestCaptor = ArgumentCaptor.forClass(TracingProto.Analysis.Req.class);
 

@@ -17,27 +17,27 @@
  * under the License.
  */
 
-package grabl.tracing.client;
+package com.vaticle.factory.client;
 
 import java.util.UUID;
 
 /**
- * A simple no-operation GrablTracing.
+ * A simple no-operation FactoryTracing.
  *
  * Uses the Bill Pugh method of lazy singleton instantiation.
  */
-public class GrablTracingNoOp implements GrablTracing {
+public class FactoryTracingNoOp implements FactoryTracing {
 
-    private GrablTracingNoOp() {
+    private FactoryTracingNoOp() {
     }
 
     private static class LazyHolder {
-        private static final GrablTracingNoOp TRACING = new GrablTracingNoOp();
+        private static final FactoryTracingNoOp TRACING = new FactoryTracingNoOp();
         private static final TraceImpl TRACE = new TraceImpl();
         private static final AnalysisImpl ANALYSIS = new AnalysisImpl();
     }
 
-    static GrablTracing getInstance() {
+    static FactoryTracing getInstance() {
         return LazyHolder.TRACING;
     }
 

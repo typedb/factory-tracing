@@ -17,17 +17,17 @@
  * under the License.
  */
 
-package grabl.tracing.test.deployment.src.test.java.application;
+package com.vaticle.factory.test.deployment.src.test.java.application;
 
-import grabl.tracing.client.GrablTracing;
-import grabl.tracing.protocol.TracingProto;
+import com.vaticle.factory.client.FactoryTracing;
+import com.vaticle.factory.protocol.TracingProto;
 import org.junit.Test;
 
 public class MavenApplicationTest {
     @Test
     public void testImport() {
-        GrablTracing tracing = GrablTracing.createNoOp();
-        GrablTracing.Analysis analysis = tracing.analysis("owner", "repo", "commit", "analysis-name");
+        FactoryTracing tracing = FactoryTracing.createNoOp();
+        FactoryTracing.Analysis analysis = tracing.analysis("owner", "repo", "commit", "analysis-name");
         analysis.trace("trace", "tracker", 1).trace("sub").end();
 
         TracingProto.Trace.Req.newBuilder().setName("name").build();

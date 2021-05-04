@@ -17,10 +17,10 @@
  * under the License.
  */
 
-package grabl.tracing.client;
+package com.vaticle.factory.client;
 
-import grabl.tracing.client.GrablTracing.Analysis;
-import grabl.tracing.client.GrablTracing.Trace;
+import com.vaticle.factory.client.FactoryTracing.Analysis;
+import com.vaticle.factory.client.FactoryTracing.Trace;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * ongoing in the application, but the advantage is that the application does not have to pass around trace parameters
  * or extend internal APIs, making adding tracing to an existing application as a cross-cutting concern much easier.
  */
-public class GrablTracingThreadStatic {
+public class FactoryTracingThreadStatic {
 
     private static final String EMPTY = "";
 
@@ -43,7 +43,7 @@ public class GrablTracingThreadStatic {
     private static final AtomicBoolean ENABLED = new AtomicBoolean(false);
     private static final AtomicBoolean ANALYSIS_SET = new AtomicBoolean(false);
 
-    private static GrablTracing singletonClient;
+    private static FactoryTracing singletonClient;
     private static Analysis singletonAnalysis;
 
     private static final ThreadStack<ThreadContext> contextStack = new ThreadStack<>();
@@ -52,31 +52,31 @@ public class GrablTracingThreadStatic {
     /**
      * Set the Analysis for the application and enable tracing globally beyond this point.
      *
-     * @param client The Grabl tracing client to set.
+     * @param client The Vaticle Factory tracing client to set.
      */
-    public synchronized static void setGlobalTracingClient(GrablTracing client) {
+    public synchronized static void setGlobalTracingClient(FactoryTracing client) {
         if (ENABLED.compareAndSet(false, true)) {
             singletonClient = client;
         } else {
-            throw new IllegalStateException("Tried to set global Grabl tracing client twice");
+            throw new IllegalStateException("Tried to set global Vaticle Factory tracing client twice");
         }
     }
 
     /**
-     * Get the current singleton grabl tracing client. The user should always call {@link #isTracingEnabled()} first.
+     * Get the current singleton Vaticle Factory tracing client. The user should always call {@link #isTracingEnabled()} first.
      *
-     * @return the singleton grabl tracing client
+     * @return the singleton Vaticle Factory tracing client
      */
-    public static GrablTracing getGrablTracing() {
+    public static FactoryTracing getFactoryTracing() {
         return singletonClient;
     }
 
     /**
      * Set the Analysis for the application and enable tracing globally beyond this point.
      *
-     * @param owner The Grabl tracing repo owner to set.
-     * @param repo The Grabl tracing repo to set.
-     * @param commit The Grabl tracing commit to set.
+     * @param owner  The Vaticle Factory tracing repo owner to set.
+     * @param repo   The Vaticle Factory tracing repo to set.
+     * @param commit The Vaticle Factory tracing commit to set.
      */
     public synchronized static void openGlobalAnalysis(String owner, String repo, String commit, String analysisName) {
         if (!ENABLED.get()) {
@@ -96,11 +96,10 @@ public class GrablTracingThreadStatic {
      * If no trace is currently present, uses the current thread's context to provide the parameters necessary to start
      * a new root trace. Use {@link #contextOnThread(String, int)} to supply context.
      *
-     * @throws IllegalStateException if there is no current trace on the trace stack and not context on the context
-     * stack.
-     *
      * @param name The trace name.
      * @return A try-with-resources representation of the Trace and its existence on the thread's stack.
+     * @throws IllegalStateException if there is no current trace on the trace stack and not context on the context
+     *                               stack.
      */
     public static ThreadTrace traceOnThread(String name) {
         if (!ENABLED.get()) {
@@ -127,9 +126,9 @@ public class GrablTracingThreadStatic {
     /**
      * Open a trace continuing from a parent that may have been distributed across a network.
      *
-     * @param rootId The parent trace rootId (identifies the trace tree).
+     * @param rootId   The parent trace rootId (identifies the trace tree).
      * @param parentId The parent trace id.
-     * @param name The trace name.
+     * @param name     The trace name.
      * @return A try-with-resources representation of the Trace and its existence on the thread's stack.
      */
     public static ThreadTrace continueTraceOnThread(UUID rootId, UUID parentId, String name) {
@@ -156,7 +155,7 @@ public class GrablTracingThreadStatic {
     /**
      * Places context onto this thread's {@link ThreadLocal} stack, which is used to create new root traces.
      *
-     * @param tracker The tracker for this trace.
+     * @param tracker   The tracker for this trace.
      * @param iteration The iteration for this trace.
      * @return A try-with-resources instance to control the lifetime of this context information on the thread's stack.
      */
@@ -183,7 +182,7 @@ public class GrablTracingThreadStatic {
      */
     public interface ThreadTrace extends Trace, AutoCloseable {
         /**
-         * Behaves the same way as {@link GrablTracingThreadStatic#traceOnThread(String)} but specifically creates a child
+         * Behaves the same way as {@link FactoryTracingThreadStatic#traceOnThread(String)} but specifically creates a child
          * of this {@link ThreadTrace} for the local thread rather than a child of the current thread trace.
          *
          * @param name The trace name.
@@ -200,6 +199,7 @@ public class GrablTracingThreadStatic {
      */
     public interface ThreadContext extends AutoCloseable {
         String getTracker();
+
         int getIteration();
 
         @Override
@@ -372,7 +372,7 @@ public class GrablTracingThreadStatic {
             Deque<T> deque = stack.get();
             if (deque == null) {
                 throw new NoSuchElementException();
-            } else  {
+            } else {
                 T item = deque.pop();
                 if (deque.isEmpty()) {
                     stack.set(null);

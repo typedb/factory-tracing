@@ -19,11 +19,11 @@
 
 package(default_visibility = ["//visibility:public"])
 
-load("@graknlabs_bazel_distribution//maven:rules.bzl", "assemble_maven", "deploy_maven")
-load("@graknlabs_dependencies//tool/checkstyle:rules.bzl", "checkstyle_test")
-load("@graknlabs_dependencies//distribution:deployment.bzl", "deployment")
-load("@graknlabs_dependencies//distribution/maven:version.bzl", "version")
-load("@graknlabs_dependencies//library/maven:artifacts.bzl", artifacts_org = "artifacts")
+load("@vaticle_bazel_distribution//maven:rules.bzl", "assemble_maven", "deploy_maven")
+load("@vaticle_dependencies//tool/checkstyle:rules.bzl", "checkstyle_test")
+load("@vaticle_dependencies//distribution:deployment.bzl", "deployment")
+load("@vaticle_dependencies//distribution/maven:version.bzl", "version")
+load("@vaticle_dependencies//library/maven:artifacts.bzl", artifacts_org = "artifacts")
 load("//dependencies/maven:artifacts.bzl", "artifacts_repo")
 
 java_library(
@@ -45,7 +45,7 @@ java_library(
         "@maven//:io_netty_netty_handler",
         "@maven//:io_netty_netty_tcnative_boringssl_static",
     ],
-    tags = ["maven_coordinates=io.grabl:grabl-tracing-client:{pom_version}"],
+    tags = ["maven_coordinates=com.vaticle.factory:factory-tracing-client:{pom_version}"],
 )
 
 checkstyle_test(
@@ -58,13 +58,13 @@ checkstyle_test(
 assemble_maven(
     name = "assemble-maven",
     target = "//client",
-    source_jar_prefix = "grabl/tracing/",
-    workspace_refs = "@graknlabs_grabl_tracing_workspace_refs//:refs.json",
+    source_jar_prefix = "com/vaticle/factory/tracing/",
+    workspace_refs = "@vaticle_factory_tracing_workspace_refs//:refs.json",
     version_overrides = version(artifacts_org, artifacts_repo),
-    project_name = "Grabl Tracing Client",
-    project_description = "Grabl Tracing API and Client",
-    project_url = "https://github.com/graknlabs/grabl-tracing",
-    scm_url = "https://github.com/graknlabs/grabl-tracing",
+    project_name = "Vaticle Factory Tracing Client",
+    project_description = "Vaticle Factory Tracing API and Client",
+    project_url = "https://github.com/vaticle/factory-tracing",
+    scm_url = "https://github.com/vaticle/factory-tracing",
 )
 
 deploy_maven(

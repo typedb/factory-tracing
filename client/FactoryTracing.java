@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package grabl.tracing.client;
+package com.vaticle.factory.client;
 
 import io.grpc.ManagedChannelBuilder;
 
@@ -26,12 +26,12 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Grabl Tracing client.
+ * Vaticle Factory Tracing client.
  */
-public interface GrablTracing extends AutoCloseable {
+public interface FactoryTracing extends AutoCloseable {
 
     /**
-     * Create a new performance analysis in Grabl to add new traces to.
+     * Create a new performance analysis in Vaticle Factory to add new traces to.
      *
      * @param owner  The repository organisation/owner.
      * @param repo   The repository.
@@ -53,55 +53,55 @@ public interface GrablTracing extends AutoCloseable {
     Trace trace(UUID rootId, UUID parentId, String name);
 
     /**
-     * Decorate a GrablTracing with Slf4j logging (if the logging is enabled to the TRACE level).
+     * Decorate a FactoryTracing with Slf4j logging (if the logging is enabled to the TRACE level).
      *
      * @return If logging is enabled, a wrapped instance that logs to Slf4j, otherwise the instance {@param inner}.
      */
-    default GrablTracing withLogging() {
-        return GrablTracingSlf4j.wrapIfLoggingEnabled(this);
+    default FactoryTracing withLogging() {
+        return FactoryTracingSlf4j.wrapIfLoggingEnabled(this);
     }
 
     /**
-     * Get a GrablTracing that can be used to safely run tracing-enabled applications with no connection and minimal
+     * Get a FactoryTracing that can be used to safely run tracing-enabled applications with no connection and minimal
      * associated overhead.
      *
-     * @return an instance that does nothing but adheres to the {@link GrablTracing} contract sufficiently to work with
+     * @return an instance that does nothing but adheres to the {@link FactoryTracing} contract sufficiently to work with
      * any code that does tracing.
      */
-    static GrablTracing createNoOp() {
-        return GrablTracingNoOp.getInstance();
+    static FactoryTracing createNoOp() {
+        return FactoryTracingNoOp.getInstance();
     }
 
     /**
-     * A plaintext variation of Grabl tracing, useful for testing the tracing protocol but should not be used in real
+     * A plaintext variation of Vaticle Factory tracing, useful for testing the tracing protocol but should not be used in real
      * applications.
      *
      * @param uri The URI of your test tracing server.
      * @return An instance that has connected to your server without any authentication.
      */
-    static GrablTracing create(String uri) {
+    static FactoryTracing create(String uri) {
         return create(uri, null);
     }
 
     /**
-     * Connect to the Grabl tracing server with TLS and providing
+     * Connect to the Vaticle Factory tracing server with TLS and providing
      *
-     * @param uri      The URI of your Grabl server.
-     * @param username Your username on the Grabl server.
+     * @param uri      The URI of your Vaticle Factory server.
+     * @param username Your username on the Vaticle Factory server.
      * @param token    Your API token for the username.
-     * @return An instance that has securely connected to your Grabl server.
+     * @return An instance that has securely connected to your Vaticle Factory server.
      */
-    static GrablTracing create(String uri, String username, String token) {
-        return create(uri, new GrablTokenAuthClientInterceptor(username, token));
+    static FactoryTracing create(String uri, String username, String token) {
+        return create(uri, new FactoryTokenAuthClientInterceptor(username, token));
     }
 
-    private static GrablTracing create(String uri, @Nullable GrablTokenAuthClientInterceptor authClientInterceptor) {
+    private static FactoryTracing create(String uri, @Nullable FactoryTokenAuthClientInterceptor authClientInterceptor) {
         ManagedChannelBuilder<?> channelBuilder = ManagedChannelBuilder.forTarget(uri)
                 .keepAliveTime(1, TimeUnit.MINUTES)
                 .keepAliveWithoutCalls(true)
                 .useTransportSecurity();
         if (authClientInterceptor != null) channelBuilder.intercept(authClientInterceptor);
-        return new GrablTracingStandard(channelBuilder.build());
+        return new FactoryTracingStandard(channelBuilder.build());
     }
 
     /**

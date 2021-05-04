@@ -27,10 +27,10 @@ under the License.
         </encoder>
     </appender>
 
-    <logger name="grabl.tracing.client.GrablTracingSlf4j" level="TRACE" />
-    <logger name="grabl.tracing" level="DEBUG" />
+    <logger name="com.vaticle.factory.client.FactoryTracingSlf4j" level="TRACE"/>
+    <logger name="com.vaticle.factory" level="DEBUG"/>
 
     <root level="INFO">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

@@ -17,18 +17,16 @@
  * under the License.
  */
 
-package grabl.tracing.example;
+package com.vaticle.factory.example;
 
-import grabl.tracing.protocol.TracingProto.Analysis;
-import grabl.tracing.protocol.TracingProto.Trace;
-import grabl.tracing.protocol.TracingServiceGrpc.TracingServiceImplBase;
+import com.vaticle.factory.protocol.TracingProto.Analysis;
+import com.vaticle.factory.protocol.TracingProto.Trace;
+import com.vaticle.factory.protocol.TracingServiceGrpc.TracingServiceImplBase;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
 import java.util.UUID;
-
-import static grabl.tracing.protocol.util.ProtobufUUIDUtil.toBuf;
 
 public class ExampleTracingServer extends TracingServiceImplBase {
     private Server server;

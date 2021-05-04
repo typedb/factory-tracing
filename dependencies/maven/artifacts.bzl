@@ -38,7 +38,7 @@ artifacts = [
     "org.slf4j:slf4j-api"
 ]
 
-# Override libraries conflicting with versions defined in @graknlabs_dependencies
+# Override libraries conflicting with versions defined in @vaticle_dependencies
 artifacts_repo = {
     "io.netty:netty-all": "4.1.38.Final",
     "io.netty:netty-codec-http2": "4.1.38.Final",

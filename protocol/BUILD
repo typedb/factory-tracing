@@ -19,12 +19,12 @@
 
 package(default_visibility = ["//visibility:public"])
 load("@stackb_rules_proto//java:java_grpc_compile.bzl", "java_grpc_compile")
-load("@graknlabs_dependencies//tool/checkstyle:rules.bzl", "checkstyle_test")
-load("@graknlabs_dependencies//distribution:deployment.bzl", "deployment")
-load("@graknlabs_dependencies//distribution/maven:version.bzl", "version")
-load("@graknlabs_dependencies//library/maven:artifacts.bzl", artifacts_org = "artifacts")
+load("@vaticle_dependencies//tool/checkstyle:rules.bzl", "checkstyle_test")
+load("@vaticle_dependencies//distribution:deployment.bzl", "deployment")
+load("@vaticle_dependencies//distribution/maven:version.bzl", "version")
+load("@vaticle_dependencies//library/maven:artifacts.bzl", artifacts_org = "artifacts")
 load("//dependencies/maven:artifacts.bzl", "artifacts_repo")
-load("@graknlabs_bazel_distribution//maven:rules.bzl", "assemble_maven", "deploy_maven")
+load("@vaticle_bazel_distribution//maven:rules.bzl", "assemble_maven", "deploy_maven")
 
 proto_library(
     name = "tracing-proto",
@@ -53,7 +53,7 @@ java_library(
         "@maven//:io_grpc_grpc_api",
         "@maven//:javax_annotation_javax_annotation_api",
     ],
-    tags = ["maven_coordinates=io.grabl:grabl-tracing-protocol:{pom_version}"],
+    tags = ["maven_coordinates=com.vaticle.factory:factory-tracing-protocol:{pom_version}"],
 )
 
 checkstyle_test(
@@ -70,12 +70,12 @@ assemble_maven(
     name = "assemble-maven",
     target = "//protocol",
     source_jar_prefix = "",
-    workspace_refs = "@graknlabs_grabl_tracing_workspace_refs//:refs.json",
+    workspace_refs = "@vaticle_factory_tracing_workspace_refs//:refs.json",
     version_overrides = version(artifacts_org, artifacts_repo),
-    project_name = "Grabl Tracing Protocol",
-    project_description = "Grabl Tracing Protocol",
-    project_url = "https://github.com/graknlabs/grabl-tracing",
-    scm_url = "https://github.com/graknlabs/grabl-tracing",
+    project_name = "Vaticle Factory Tracing Protocol",
+    project_description = "Vaticle Factory Tracing Protocol",
+    project_url = "https://github.com/vaticle/factory-tracing",
+    scm_url = "https://github.com/vaticle/factory-tracing",
 )
 
 deploy_maven(

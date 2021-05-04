@@ -17,28 +17,27 @@
  * under the License.
  */
 
-package grabl.tracing.client;
+package com.vaticle.factory.client;
 
-import grabl.tracing.protocol.TracingProto;
-import grabl.tracing.protocol.TracingServiceGrpc;
-import grabl.tracing.protocol.TracingServiceGrpc.TracingServiceBlockingStub;
-import grabl.tracing.protocol.TracingServiceGrpc.TracingServiceStub;
+import com.vaticle.factory.protocol.TracingProto;
+import com.vaticle.factory.protocol.TracingServiceGrpc;
+import com.vaticle.factory.protocol.TracingServiceGrpc.TracingServiceBlockingStub;
+import com.vaticle.factory.protocol.TracingServiceGrpc.TracingServiceStub;
 import io.grpc.ManagedChannel;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static grabl.tracing.protocol.util.ProtobufUUIDUtil.fromBuf;
 import static java.util.Objects.requireNonNull;
 
-public class GrablTracingStandard implements GrablTracing {
+public class FactoryTracingStandard implements FactoryTracing {
     private final ManagedChannel channel;
     private final TracingServiceBlockingStub tracingServiceBlockingStub;
     private final TracingServiceStub tracingServiceStub;
 
     private final TraceStream stream;
 
-    public GrablTracingStandard(ManagedChannel channel) {
+    public FactoryTracingStandard(ManagedChannel channel) {
         this.channel = channel;
         tracingServiceBlockingStub = TracingServiceGrpc.newBlockingStub(channel);
         tracingServiceStub = TracingServiceGrpc.newStub(channel);

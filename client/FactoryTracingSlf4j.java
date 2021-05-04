@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package grabl.tracing.client;
+package com.vaticle.factory.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,18 +26,18 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.UUID;
 
-public class GrablTracingSlf4j implements GrablTracing {
-    private static final Logger LOG = LoggerFactory.getLogger(GrablTracingSlf4j.class);
+public class FactoryTracingSlf4j implements FactoryTracing {
+    private static final Logger LOG = LoggerFactory.getLogger(FactoryTracingSlf4j.class);
 
-    private final GrablTracing innerTracing;
+    private final FactoryTracing innerTracing;
 
-    private GrablTracingSlf4j(GrablTracing inner) {
+    private FactoryTracingSlf4j(FactoryTracing inner) {
         innerTracing = inner;
     }
 
-    static GrablTracing wrapIfLoggingEnabled(GrablTracing inner) {
+    static FactoryTracing wrapIfLoggingEnabled(FactoryTracing inner) {
         if (LOG.isTraceEnabled()) {
-            return new GrablTracingSlf4j(inner);
+            return new FactoryTracingSlf4j(inner);
         } else {
             return inner;
         }
@@ -58,7 +58,7 @@ public class GrablTracingSlf4j implements GrablTracing {
     }
 
     @Override
-    public GrablTracing withLogging() {
+    public FactoryTracing withLogging() {
         return this;
     }
 

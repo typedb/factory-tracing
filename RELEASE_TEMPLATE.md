@@ -1,17 +1,17 @@
 ### Distribution
 
-Available through https://repo.grakn.ai
+Available through https://repo.vaticle.com
 ```xml
 <repositories>
     <repository>
-        <id>repo.grakn.ai</id>
-        <url>https://repo.grakn.ai/repository/maven/</url>
+        <id>repo.vaticle.com</id>
+        <url>https://repo.vaticle.com/repository/maven/</url>
     </repository>
 </repositories>
 <dependencies>
     <dependency>
-        <groupid>io.grabl</groupid>
-        <artifactid>grabl-tracing-client</artifactid>
+        <groupid>com.vaticle.factory</groupid>
+        <artifactid>factory-tracing-client</artifactid>
         <version>{version}</version>
     </dependency>
 </dependencies>

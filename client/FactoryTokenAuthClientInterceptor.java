@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package grabl.tracing.client;
+package com.vaticle.factory.client;
 
 import io.grpc.CallOptions;
 import io.grpc.Channel;
@@ -29,9 +29,9 @@ import io.grpc.MethodDescriptor;
 
 /**
  * A GRPC {@link ClientInterceptor} that adds the username and api-token to the metadata for every rpc so that the
- * grabl tracing server can authenticate us.
+ * Vaticle Factory tracing server can authenticate us.
  */
-class GrablTokenAuthClientInterceptor implements ClientInterceptor {
+class FactoryTokenAuthClientInterceptor implements ClientInterceptor {
 
     private static final Metadata.Key<String> USERNAME = Metadata.Key.of("username", Metadata.ASCII_STRING_MARSHALLER);
     private static final Metadata.Key<String> API_TOKEN = Metadata.Key.of("api-token", Metadata.ASCII_STRING_MARSHALLER);
@@ -39,7 +39,7 @@ class GrablTokenAuthClientInterceptor implements ClientInterceptor {
     private final String username;
     private final String apiToken;
 
-    GrablTokenAuthClientInterceptor(String username, String apiToken) {
+    FactoryTokenAuthClientInterceptor(String username, String apiToken) {
         this.username = username;
         this.apiToken = apiToken;
     }

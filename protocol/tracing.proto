@@ -19,7 +19,7 @@
 
 syntax = "proto3";
 
-option java_package = "grabl.tracing.protocol";
+option java_package = "com.vaticle.factory.protocol";
 option java_outer_classname = "TracingProto";
 
 package protocol;

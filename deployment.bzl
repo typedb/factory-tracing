@@ -18,6 +18,6 @@
 #
 
 deployment = {
-    "github.organisation" : "graknlabs",
-    "github.repository" : "grabl-tracing"
+    "github.organisation" : "vaticle",
+    "github.repository" : "factory-tracing"
 }

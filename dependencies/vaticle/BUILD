@@ -17,11 +17,11 @@
 # under the License.
 #
 
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+load("@vaticle_dependencies//tool/checkstyle:rules.bzl", "checkstyle_test")
 
-def graknlabs_dependencies():
-    git_repository(
-        name = "graknlabs_dependencies",
-        remote = "https://github.com/graknlabs/dependencies",
-        commit = "adb0d08bf56a64ae7d731800cfc0f85c63733cf1", # sync-marker: do not remove this comment, this is used for sync-dependencies by @graknlabs_dependencies
-    )
+checkstyle_test(
+    name = "checkstyle",
+    include = glob(["*"]),
+    license_type = "apache",
+    size = "small",
+)

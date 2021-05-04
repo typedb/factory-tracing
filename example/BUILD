@@ -17,7 +17,7 @@
 # under the License.
 #
 
-load("@graknlabs_dependencies//tool/checkstyle:rules.bzl", "checkstyle_test")
+load("@vaticle_dependencies//tool/checkstyle:rules.bzl", "checkstyle_test")
 
 java_binary(
     name = "server",
@@ -30,7 +30,7 @@ java_binary(
         "@maven//:io_grpc_grpc_stub",
         "@maven//:io_grpc_grpc_api",
     ],
-    main_class = "grabl.tracing.example.ExampleTracingServer",
+    main_class = "com.vaticle.factory.example.ExampleTracingServer",
     runtime_deps = [
         "@maven//:io_grpc_grpc_netty",
         "@maven//:io_netty_netty_codec_http2",
@@ -52,7 +52,7 @@ java_binary(
         "@maven//:io_grpc_grpc_api",
         "@maven//:org_slf4j_slf4j_api",
     ],
-    main_class = "grabl.tracing.example.ExampleTracingClient",
+    main_class = "com.vaticle.factory.example.ExampleTracingClient",
     runtime_deps = [
         "//protocol",
         "@maven//:io_grpc_grpc_netty",

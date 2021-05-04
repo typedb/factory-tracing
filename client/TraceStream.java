@@ -17,7 +17,11 @@
  * under the License.
  */
 
-package grabl.tracing.client;
+package com.vaticle.factory.client;
+
+import com.vaticle.factory.protocol.TracingProto.Trace;
+import com.vaticle.factory.protocol.TracingServiceGrpc.TracingServiceStub;
+import io.grpc.stub.StreamObserver;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -26,11 +30,7 @@ import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import grabl.tracing.protocol.TracingProto.Trace;
-import grabl.tracing.protocol.TracingServiceGrpc.TracingServiceStub;
-import io.grpc.stub.StreamObserver;
-
-import static grabl.tracing.protocol.util.ProtobufUUIDUtil.toBuf;
+import static com.vaticle.factory.protocol.util.ProtobufUUIDUtil.toBuf;
 
 /**
  * The GRPC client layer for the tracing session.
@@ -60,9 +60,9 @@ class TraceStream {
         Trace.Req req = Trace.Req.newBuilder()
                 .setId(toBuf(traceId))
                 .setRootStart(Trace.Req.StartRoot.newBuilder()
-                        .setAnalysisId(analysisId)
-                        .setTracker(tracker)
-                        .setIteration(iteration))
+                                      .setAnalysisId(analysisId)
+                                      .setTracker(tracker)
+                                      .setIteration(iteration))
                 .setName(name)
                 .setStarted(startMillis)
                 .build();

@@ -17,12 +17,12 @@
 # under the License.
 #
 
-load("@graknlabs_dependencies//tool/checkstyle:rules.bzl", "checkstyle_test")
+load("@vaticle_dependencies//tool/checkstyle:rules.bzl", "checkstyle_test")
 
 java_test(
     name = "test",
-    srcs = ["GrablTracingClientTest.java"],
-    test_class = "grabl.tracing.client.test.GrablTracingClientTest",
+    srcs = ["FactoryTracingClientTest.java"],
+    test_class = "com.vaticle.factory.client.test.FactoryTracingClientTest",
     deps = [
         "//client",
         "//protocol",
