@@ -17,11 +17,11 @@
  * under the License.
  */
 
-package com.vaticle.factory.example;
+package com.vaticle.factory.tracing.example;
 
-import com.vaticle.factory.protocol.TracingProto.Analysis;
-import com.vaticle.factory.protocol.TracingProto.Trace;
-import com.vaticle.factory.protocol.TracingServiceGrpc.TracingServiceImplBase;
+import com.vaticle.factory.tracing.protocol.TracingProto.Analysis;
+import com.vaticle.factory.tracing.protocol.TracingProto.Trace;
+import com.vaticle.factory.tracing.protocol.TracingServiceGrpc.TracingServiceImplBase;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;

@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package com.vaticle.factory.client;
+package com.vaticle.factory.tracing.client;
 
 import io.grpc.CallOptions;
 import io.grpc.Channel;

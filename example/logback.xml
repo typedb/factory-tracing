@@ -27,8 +27,8 @@ under the License.
         </encoder>
     </appender>
 
-    <logger name="com.vaticle.factory.client.FactoryTracingSlf4j" level="TRACE"/>
-    <logger name="com.vaticle.factory" level="DEBUG"/>
+    <logger name="com.vaticle.factory.tracing.client.FactoryTracingSlf4j" level="TRACE"/>
+    <logger name="com.vaticle.factory.tracing" level="DEBUG"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>

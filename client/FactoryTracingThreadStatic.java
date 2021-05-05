@@ -17,10 +17,10 @@
  * under the License.
  */
 
-package com.vaticle.factory.client;
+package com.vaticle.factory.tracing.client;
 
-import com.vaticle.factory.client.FactoryTracing.Analysis;
-import com.vaticle.factory.client.FactoryTracing.Trace;
+import com.vaticle.factory.tracing.client.FactoryTracing.Analysis;
+import com.vaticle.factory.tracing.client.FactoryTracing.Trace;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

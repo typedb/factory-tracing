@@ -17,12 +17,12 @@
  * under the License.
  */
 
-package com.vaticle.factory.client;
+package com.vaticle.factory.tracing.client;
 
-import com.vaticle.factory.protocol.TracingProto;
-import com.vaticle.factory.protocol.TracingServiceGrpc;
-import com.vaticle.factory.protocol.TracingServiceGrpc.TracingServiceBlockingStub;
-import com.vaticle.factory.protocol.TracingServiceGrpc.TracingServiceStub;
+import com.vaticle.factory.tracing.protocol.TracingProto;
+import com.vaticle.factory.tracing.protocol.TracingServiceGrpc;
+import com.vaticle.factory.tracing.protocol.TracingServiceGrpc.TracingServiceBlockingStub;
+import com.vaticle.factory.tracing.protocol.TracingServiceGrpc.TracingServiceStub;
 import io.grpc.ManagedChannel;
 
 import java.util.UUID;

@@ -17,10 +17,10 @@
  * under the License.
  */
 
-package com.vaticle.factory.test.deployment.src.test.java.application;
+package com.vaticle.factory.tracing.test.deployment.src.test.java.application;
 
-import com.vaticle.factory.client.FactoryTracing;
-import com.vaticle.factory.protocol.TracingProto;
+import com.vaticle.factory.tracing.client.FactoryTracing;
+import com.vaticle.factory.tracing.protocol.TracingProto;
 import org.junit.Test;
 
 public class MavenApplicationTest {

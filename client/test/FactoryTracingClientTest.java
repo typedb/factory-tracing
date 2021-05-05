@@ -17,12 +17,12 @@
  * under the License.
  */
 
-package com.vaticle.factory.client.test;
+package com.vaticle.factory.tracing.client.test;
 
-import com.vaticle.factory.client.FactoryTracing;
-import com.vaticle.factory.client.FactoryTracingStandard;
-import com.vaticle.factory.protocol.TracingProto;
-import com.vaticle.factory.protocol.TracingServiceGrpc;
+import com.vaticle.factory.tracing.client.FactoryTracing;
+import com.vaticle.factory.tracing.client.FactoryTracingStandard;
+import com.vaticle.factory.tracing.protocol.TracingProto;
+import com.vaticle.factory.tracing.protocol.TracingServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.inprocess.InProcessServerBuilder;

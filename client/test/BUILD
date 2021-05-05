@@ -22,7 +22,7 @@ load("@vaticle_dependencies//tool/checkstyle:rules.bzl", "checkstyle_test")
 java_test(
     name = "test",
     srcs = ["FactoryTracingClientTest.java"],
-    test_class = "com.vaticle.factory.client.test.FactoryTracingClientTest",
+    test_class = "com.vaticle.factory.tracing.client.test.FactoryTracingClientTest",
     deps = [
         "//client",
         "//protocol",

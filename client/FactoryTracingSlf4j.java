@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package com.vaticle.factory.client;
+package com.vaticle.factory.tracing.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

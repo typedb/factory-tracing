@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package com.vaticle.factory.protocol.util;
+package com.vaticle.factory.tracing.protocol.util;
 
 import com.google.protobuf.ByteString;
 

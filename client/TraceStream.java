@@ -17,10 +17,10 @@
  * under the License.
  */
 
-package com.vaticle.factory.client;
+package com.vaticle.factory.tracing.client;
 
-import com.vaticle.factory.protocol.TracingProto.Trace;
-import com.vaticle.factory.protocol.TracingServiceGrpc.TracingServiceStub;
+import com.vaticle.factory.tracing.protocol.TracingProto.Trace;
+import com.vaticle.factory.tracing.protocol.TracingServiceGrpc.TracingServiceStub;
 import io.grpc.stub.StreamObserver;
 
 import java.util.ArrayDeque;
@@ -30,7 +30,7 @@ import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import static com.vaticle.factory.protocol.util.ProtobufUUIDUtil.toBuf;
+import static com.vaticle.factory.tracing.protocol.util.ProtobufUUIDUtil.toBuf;
 
 /**
  * The GRPC client layer for the tracing session.

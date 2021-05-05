@@ -17,13 +17,13 @@
  * under the License.
  */
 
-package com.vaticle.factory.example;
+package com.vaticle.factory.tracing.example;
 
-import com.vaticle.factory.client.FactoryTracing;
-import com.vaticle.factory.client.FactoryTracing.Analysis;
-import com.vaticle.factory.client.FactoryTracing.Trace;
+import com.vaticle.factory.tracing.client.FactoryTracing;
+import com.vaticle.factory.tracing.client.FactoryTracing.Analysis;
+import com.vaticle.factory.tracing.client.FactoryTracing.Trace;
 
-import static com.vaticle.factory.client.FactoryTracing.create;
+import static com.vaticle.factory.tracing.client.FactoryTracing.create;
 
 public class ExampleTracingClient {
 
