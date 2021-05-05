@@ -54,22 +54,22 @@ build:
         owner: vaticle
         branch: master
       image: vaticle-ubuntu-20.04
+      dependencies: [build, build-dependency] # TODO: make it depend on test-client once fixed
       command: |
         export DEPLOY_MAVEN_USERNAME=$REPO_VATICLE_USERNAME
         export DEPLOY_MAVEN_PASSWORD=$REPO_VATICLE_PASSWORD
         bazel run --define version=$(git rev-parse HEAD) //client:deploy-maven -- snapshot
         bazel run --define version=$(git rev-parse HEAD) //protocol:deploy-maven -- snapshot
-      dependencies: [build, build-dependency] # TODO: make it depend on test-client once fixed
     test-deployment-maven:
       filter:
         owner: vaticle
         branch: master
       image: vaticle-ubuntu-20.04
+      dependencies: [deploy-maven-snapshot]
       command: |
         sed -i -e "s/FACTORY_TRACING_VERSION_MARKER/$(git rev-parse HEAD)/g" test/deployment/pom.xml
         cat test/deployment/pom.xml
         cd test/deployment && mvn test
-      dependencies: [deploy-maven-snapshot]
 
 release:
   filter:

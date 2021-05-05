@@ -9,7 +9,7 @@
 @maven//:com_google_api_grpc_proto_google_common_protos
 @maven//:com_google_api_grpc_proto_google_common_protos_1_17_0
 @maven//:com_google_code_findbugs_jsr305
-@maven//:com_google_code_findbugs_jsr305_3_0_2
+@maven//:com_google_code_findbugs_jsr305_2_0_2
 @maven//:com_google_code_gson_gson
 @maven//:com_google_code_gson_gson_2_8_6
 @maven//:com_google_errorprone_error_prone_annotations
