@@ -60,7 +60,6 @@ checkstyle_test(
 assemble_maven(
     name = "assemble-maven",
     target = "//client",
-    source_jar_prefix = "com/vaticle/factory/tracing/",
     workspace_refs = "@vaticle_factory_tracing_workspace_refs//:refs.json",
     version_overrides = version(artifacts_org, artifacts_repo),
     project_name = "Vaticle Factory Tracing Client",
