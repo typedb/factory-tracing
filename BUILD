@@ -31,12 +31,23 @@ exports_files(["VERSION", "RELEASE_TEMPLATE.md"])
 checkstyle_test(
     name = "checkstyle",
     include = glob([
-        "*",
+        ".bazelrc",
+        ".gitignore",
         ".grabl/automation.yml",
+        "BUILD",
+        "WORKSPACE",
+        "deployment.bzl",
         "test/deployment/pom.xml",
         "test/deployment/src/test/**/*",
     ]),
-    license_type = "apache",
+    license_type = "apache-header",
+    size = "small",
+)
+
+checkstyle_test(
+    name = "checkstyle-license",
+    include = ["LICENSE"],
+    license_type = "apache-fulltext",
     size = "small",
 )
 
