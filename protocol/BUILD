@@ -64,7 +64,7 @@ checkstyle_test(
         "*",
         "util/*",
     ]),
-    license_type = "apache",
+    license_type = "apache-header",
     size = "small",
 )
 

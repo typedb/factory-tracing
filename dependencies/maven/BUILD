@@ -27,6 +27,6 @@ checkstyle_test(
     name = "checkstyle",
     include = glob(["*"]),
     exclude = ["artifacts.snapshot"],
-    license_type = "apache",
+    license_type = "apache-header",
     size = "small",
 )
