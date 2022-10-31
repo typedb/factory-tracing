@@ -33,7 +33,7 @@ checkstyle_test(
     include = glob([
         ".bazelrc",
         ".gitignore",
-        ".grabl/automation.yml",
+        ".factory/automation.yml",
         "BUILD",
         "WORKSPACE",
         "deployment.bzl",
