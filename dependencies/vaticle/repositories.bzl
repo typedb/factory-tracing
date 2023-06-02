@@ -25,5 +25,5 @@ def vaticle_dependencies():
     git_repository(
         name = "vaticle_dependencies",
         remote = "https://github.com/vaticle/dependencies",
-        commit = "4464b506ca469f37d3b696fb2f1eda34061cdaa1",  # sync-marker: do not remove this comment, this is used for sync-dependencies by @vaticle_dependencies
+        commit = "51fdda8c935d5f9fc34bfdf41b0a6ac1ca77e2ee",  # sync-marker: do not remove this comment, this is used for sync-dependencies by @vaticle_dependencies
     )
