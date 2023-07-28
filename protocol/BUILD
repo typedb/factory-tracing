@@ -20,40 +20,29 @@
 #
 
 package(default_visibility = ["//visibility:public"])
-load("@stackb_rules_proto//java:java_grpc_compile.bzl", "java_grpc_compile")
 load("@vaticle_dependencies//tool/checkstyle:rules.bzl", "checkstyle_test")
 load("@vaticle_dependencies//distribution:deployment.bzl", "deployment")
 load("@vaticle_dependencies//distribution/maven:version.bzl", "version")
 load("@vaticle_dependencies//library/maven:artifacts.bzl", artifacts_org = "artifacts")
 load("//dependencies/maven:artifacts.bzl", "artifacts_repo")
 load("@vaticle_bazel_distribution//maven:rules.bzl", "assemble_maven", "deploy_maven")
+load("@rules_proto_grpc//java:defs.bzl", "java_grpc_library")
 
 proto_library(
     name = "tracing-proto",
     srcs = ["tracing.proto"],
 )
 
-java_grpc_compile(
-    name = "protocol-src",
-    deps = [
-        ":tracing-proto",
-    ]
-)
-
-java_library(
+java_grpc_library(
     name = "protocol",
+    protos = [
+        ":tracing-proto",
+    ],
     srcs = [
-        ":protocol-src",
         "util/ProtobufUUIDUtil.java",
     ],
     deps = [
-        "@maven//:com_google_guava_guava",
         "@maven//:com_google_protobuf_protobuf_java",
-        "@maven//:io_grpc_grpc_core",
-        "@maven//:io_grpc_grpc_protobuf",
-        "@maven//:io_grpc_grpc_stub",
-        "@maven//:io_grpc_grpc_api",
-        "@maven//:javax_annotation_javax_annotation_api",
     ],
     tags = ["maven_coordinates=com.vaticle.factory:factory-tracing-protocol:{pom_version}"],
 )

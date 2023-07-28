@@ -24,6 +24,6 @@ load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 def vaticle_dependencies():
     git_repository(
         name = "vaticle_dependencies",
-        remote = "https://github.com/vaticle/dependencies",
-        commit = "51fdda8c935d5f9fc34bfdf41b0a6ac1ca77e2ee",  # sync-marker: do not remove this comment, this is used for sync-dependencies by @vaticle_dependencies
+        remote = "https://github.com/flyingsilverfin/dependencies",
+        commit = "2b7384ac0e06b8ff05a9da0b5db5ef926a70c599", # sync-marker: do not remove this comment, this is used for sync-dependencies by @vaticle_dependencies
     )
