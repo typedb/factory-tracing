@@ -19,7 +19,7 @@
  * under the License.
  */
 
-package com.vaticle.factory.tracing.protocol.util;
+package com.vaticle.factory.tracing.client;
 
 import com.google.protobuf.ByteString;
 
@@ -35,7 +35,7 @@ import java.util.UUID;
  * will always correctly be deserialized regardless of system endianness since Java defines its own endianness and
  * protobuf preserves it.
  */
-public class ProtobufUUIDUtil {
+public class UUIDUtil {
     private enum EmptyUUID {
         INSTANCE;
 

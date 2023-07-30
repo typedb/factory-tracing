@@ -38,12 +38,6 @@ java_grpc_library(
     protos = [
         ":tracing-proto",
     ],
-    srcs = [
-        "util/ProtobufUUIDUtil.java",
-    ],
-    deps = [
-        "@maven//:com_google_protobuf_protobuf_java",
-    ],
     tags = ["maven_coordinates=com.vaticle.factory:factory-tracing-protocol:{pom_version}"],
 )
 
